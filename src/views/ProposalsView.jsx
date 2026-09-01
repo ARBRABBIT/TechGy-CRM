@@ -1,0 +1,69 @@
+import React from 'react';
+import { FileText, CheckCircle2 } from 'lucide-react';
+
+export default function ProposalsView({ proposals = [], searchQuery = '', selectedDateFilter = 'This Month' }) {
+  const q = searchQuery.toLowerCase().trim();
+  const filteredProposals = proposals.filter(p =>
+    !q ||
+    p.proposalId.toLowerCase().includes(q) ||
+    p.company.toLowerCase().includes(q) ||
+    p.opportunity.toLowerCase().includes(q) ||
+    p.notes.toLowerCase().includes(q) ||
+    p.owner.toLowerCase().includes(q)
+  );
+
+  return (
+    <div className="proposals-view">
+      <div className="dashboard-banner">
+        <div className="banner-text">
+          <h2>06 Proposals & Commercial Worth</h2>
+          <p>Commercial values, validity dates, estimated account worth & proposal pipeline status</p>
+        </div>
+        <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600, zIndex: 2 }}>
+          {filteredProposals.length} Active Proposals
+        </span>
+      </div>
+
+      <div className="section-card">
+        <div className="section-header">
+          <h3 className="section-title">Commercial Proposals Table</h3>
+        </div>
+
+        <div style={{ overflowX: 'auto' }}>
+          <table className="action-table">
+            <thead>
+              <tr>
+                <th>Proposal ID</th>
+                <th>Company Account</th>
+                <th>Opportunity Name</th>
+                <th>Proposal Value</th>
+                <th>Est. Account Worth</th>
+                <th>Validity Date</th>
+                <th>Status Pipeline</th>
+                <th>Owner</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredProposals.map((prop) => (
+                <tr key={prop.id}>
+                  <td style={{ fontWeight: 700, color: '#063669' }}>{prop.proposalId}</td>
+                  <td style={{ fontWeight: 600 }}>{prop.company}</td>
+                  <td>{prop.opportunity}</td>
+                  <td style={{ fontWeight: 700 }}>{prop.proposalValue}</td>
+                  <td style={{ color: '#557396' }}>{prop.estimatedAccountWorth}</td>
+                  <td>{prop.validityDate}</td>
+                  <td>
+                    <span className={`status-chip ${prop.status.toLowerCase()}`}>
+                      {prop.status}
+                    </span>
+                  </td>
+                  <td>{prop.owner}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
