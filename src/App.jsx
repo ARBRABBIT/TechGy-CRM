@@ -23,8 +23,10 @@ import {
   INITIAL_ACTIVITIES,
   INITIAL_OPPORTUNITIES,
   INITIAL_PROPOSALS,
-  INITIAL_CONTACTS
+  INITIAL_CONTACTS,
+  INITIAL_NOTIFICATIONS
 } from './data/mockData';
+import { Bell } from 'lucide-react';
 
 export default function App() {
   // Navigation & Collapsible Sidebar State
@@ -44,6 +46,8 @@ export default function App() {
   const [opportunities, setOpportunities] = useState(INITIAL_OPPORTUNITIES);
   const [proposals, setProposals] = useState(INITIAL_PROPOSALS);
   const [contacts, setContacts] = useState(INITIAL_CONTACTS);
+  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+  const [toastMessage, setToastMessage] = useState(null);
 
   // Dedicated Full Page Selection States (Replaces side drawers)
   const [selectedLead, setSelectedLead] = useState(null);
@@ -56,6 +60,50 @@ export default function App() {
   // Interactive View Filter State
   const [leadsSourceFilter, setLeadsSourceFilter] = useState('');
   const [leadsOverdueOnly, setLeadsOverdueOnly] = useState(false);
+
+  const triggerToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage(null);
+    }, 3500);
+  };
+
+  const pushNotification = (title, message, category = 'Lead', targetModule = 'leads') => {
+    const newNotif = {
+      id: `NOTIF-${Date.now()}`,
+      title,
+      message,
+      timestamp: 'Just now',
+      category,
+      isRead: false,
+      priority: 'Normal',
+      targetModule
+    };
+    setNotifications(prev => [newNotif, ...prev]);
+    triggerToast(`${title}: ${message}`);
+  };
+
+  const handleMarkAsRead = (id) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, isRead: true } : n));
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
+    triggerToast('All notifications marked as read');
+  };
+
+  const handleClearAllNotifications = () => {
+    setNotifications([]);
+    triggerToast('All notifications cleared');
+  };
+
+  const handleSelectNotification = (notif) => {
+    setSelectedLead(null);
+    setSelectedAccount(null);
+    if (notif.targetModule) {
+      setActiveModule(notif.targetModule);
+    }
+  };
 
   // Cross-Navigation Handlers (Dashboard Interactions)
   const handleNavigateToLeads = (source = '', overdue = false) => {
@@ -138,7 +186,7 @@ export default function App() {
         owner: lead.leadOwner
       };
       setOpportunities([newOpp, ...opportunities]);
-      alert(`Lead "${lead.leadName}" successfully converted to Opportunity!`);
+      pushNotification('Opportunity Converted', `Lead "${lead.leadName}" (${lead.company}) converted to Opportunity!`, 'Opportunity', 'opportunities');
       setSelectedLead(null);
       setActiveModule('opportunities');
     } else {
@@ -182,6 +230,7 @@ export default function App() {
         nextAction: formData.nextAction || 'Schedule introductory discovery call'
       };
       setLeads([newLeadObj, ...leads]);
+      pushNotification('New Lead Created', `Lead "${formData.leadName}" created for ${formData.company}`, 'Lead', 'leads');
 
       // Ensure Account exists
       const existingAcc = accounts.find(a => a.companyName.toLowerCase() === formData.company.toLowerCase());
@@ -205,9 +254,11 @@ export default function App() {
     } else if (type === 'addNote' && selectedLead) {
       const updatedLeads = leads.map(l => l.id === selectedLead.id ? { ...l, notes: `${l.notes}\n• ${formData.notes}` } : l);
       setLeads(updatedLeads);
+      pushNotification('Note Added', `Added note to lead ${selectedLead.leadName}`, 'Lead', 'leads');
     } else if (type === 'assignOwner' && selectedLead) {
       const updatedLeads = leads.map(l => l.id === selectedLead.id ? { ...l, leadOwner: formData.owner } : l);
       setLeads(updatedLeads);
+      pushNotification('Owner Reassigned', `Assigned ${selectedLead.leadName} to ${formData.owner}`, 'Lead', 'leads');
     }
   };
 
@@ -253,6 +304,11 @@ export default function App() {
           contacts={contacts}
           activities={activities}
           onSelectSearchResult={handleSelectSearchResult}
+          notifications={notifications}
+          onMarkAsRead={handleMarkAsRead}
+          onMarkAllAsRead={handleMarkAllAsRead}
+          onClearAll={handleClearAllNotifications}
+          onSelectNotification={handleSelectNotification}
         />
 
         {/* 3. Main Page Content with Keyed Dynamic Transition */}
@@ -296,34 +352,46 @@ export default function App() {
               }}
             />
           ) : (
-            /* Standard Module Views */
+            /* Main Dashboard & Standard Section Modules */
             <>
               {activeModule === 'dashboard' && (
                 <DashboardView
                   leads={leads}
                   accounts={accounts}
                   activities={activities}
-                  selectedOwnerFilter={selectedOwnerFilter}
-                  selectedDateFilter={selectedDateFilter}
                   onNavigateToLeads={handleNavigateToLeads}
                   onNavigateToAccounts={handleNavigateToAccounts}
                   onNavigateToActivities={handleNavigateToActivities}
-                  onSelectLead={(lead) => setSelectedLead(lead)}
+                  onSelectLead={(lead) => {
+                    setSelectedAccount(null);
+                    setSelectedLead(lead);
+                  }}
+                  searchQuery={searchQuery}
+                  selectedDateFilter={selectedDateFilter}
+                  selectedOwnerFilter={selectedOwnerFilter}
                 />
               )}
 
               {activeModule === 'leads' && (
                 <LeadsView
                   leads={leads}
-                  onSelectLead={(lead) => setSelectedLead(lead)}
-                  onOpenCreateModal={(type) => {
-                    setModalInitialType(type);
+                  onSelectLead={(lead) => {
+                    setSelectedAccount(null);
+                    setSelectedLead(lead);
+                  }}
+                  onOpenCreateModal={() => {
+                    setModalInitialType('createLead');
                     setIsCreateModalOpen(true);
                   }}
-                  initialFilterSource={leadsSourceFilter}
-                  initialOverdueOnly={leadsOverdueOnly}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
+                  selectedOwnerFilter={selectedOwnerFilter}
+                  sourceFilter={leadsSourceFilter}
+                  overdueOnlyFilter={leadsOverdueOnly}
+                  onClearFilters={() => {
+                    setLeadsSourceFilter('');
+                    setLeadsOverdueOnly(false);
+                  }}
                 />
               )}
 
@@ -331,19 +399,29 @@ export default function App() {
                 <AccountsView
                   accounts={accounts}
                   onSelectAccount={(acc) => {
-                    const fullAcc = accounts.find(a => a.companyName.toLowerCase() === acc.companyName.toLowerCase()) || acc;
-                    setSelectedAccount(fullAcc);
+                    setSelectedLead(null);
+                    setSelectedAccount(acc);
                   }}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
+                  selectedOwnerFilter={selectedOwnerFilter}
                 />
               )}
 
               {activeModule === 'opportunities' && (
                 <OpportunitiesView
                   opportunities={opportunities}
+                  onSelectAccount={(companyName) => {
+                    const fullAcc = accounts.find(a => a.companyName.toLowerCase() === companyName.toLowerCase());
+                    if (fullAcc) {
+                      setSelectedLead(null);
+                      setSelectedAccount(fullAcc);
+                      setActiveModule('accounts');
+                    }
+                  }}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
+                  selectedOwnerFilter={selectedOwnerFilter}
                 />
               )}
 
@@ -386,6 +464,16 @@ export default function App() {
         onSave={handleSaveAction}
         initialType={modalInitialType}
       />
+
+      {/* Toast Banner Container */}
+      {toastMessage && (
+        <div className="toast-container">
+          <div className="toast-banner">
+            <Bell size={18} />
+            <span>{toastMessage}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

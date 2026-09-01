@@ -71,7 +71,7 @@ export default function LeadsView({
       {/* Banner */}
       <div className="dashboard-banner">
         <div className="banner-text">
-          <h2>02 Leads Directory & Sales Pipeline</h2>
+          <h2>Leads Directory & Sales Pipeline</h2>
           <p>Full sales status tracking, follow-up scheduling & quick drawer inspection</p>
         </div>
         <button

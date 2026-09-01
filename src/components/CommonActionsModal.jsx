@@ -71,7 +71,7 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                     onChange={(e) => setFormData({ ...formData, leadName: e.target.value })}
                   />
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Company Name *</label>
                     <input 
@@ -94,7 +94,7 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                     />
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Phone Number</label>
                     <input 
@@ -116,7 +116,7 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                     />
                   </div>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Lead Source</label>
                     <select 

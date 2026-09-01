@@ -16,7 +16,7 @@ export default function ProposalsView({ proposals = [], searchQuery = '', select
     <div className="proposals-view">
       <div className="dashboard-banner">
         <div className="banner-text">
-          <h2>06 Proposals & Commercial Worth</h2>
+          <h2>Proposals & Commercial Worth</h2>
           <p>Commercial values, validity dates, estimated account worth & proposal pipeline status</p>
         </div>
         <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600, zIndex: 2 }}>

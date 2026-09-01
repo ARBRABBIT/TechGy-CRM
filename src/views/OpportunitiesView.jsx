@@ -15,7 +15,7 @@ export default function OpportunitiesView({ opportunities = [], searchQuery = ''
     <div className="opportunities-view">
       <div className="dashboard-banner">
         <div className="banner-text">
-          <h2>04 Opportunities Pipeline</h2>
+          <h2>Opportunities Pipeline</h2>
           <p>Scored deals (0-100), expected closure dates, probability & stage progression</p>
         </div>
         <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600, zIndex: 2 }}>

@@ -32,22 +32,13 @@ export default function Sidebar({
   setIsCollapsed
 }) {
   return (
-    <aside 
-      className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}
-      onClick={() => {
-        setIsCollapsed(!isCollapsed);
-      }}
-      style={{ cursor: 'pointer' }}
-      title={isCollapsed ? "Click to expand sidebar" : "Click to collapse sidebar"}
-    >
-      {/* Sidebar Header */}
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
+      {/* Sidebar Header - Clicking Logo Box Toggles Sidebar */}
       <div className="sidebar-header">
         <div 
           className="brand-container" 
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
-          }}
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          style={{ cursor: 'pointer' }}
           title={isCollapsed ? "Click to expand sidebar" : "Click to collapse sidebar"}
         >
           {/* Logo Box with Hover Reveal Button */}
@@ -77,10 +68,7 @@ export default function Sidebar({
 
         {mobileOpen && (
           <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              setMobileOpen(false);
-            }}
+            onClick={() => setMobileOpen(false)}
             style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
           >
             <X size={20} />
@@ -88,7 +76,7 @@ export default function Sidebar({
         )}
       </div>
 
-      {/* Navigation Menu */}
+      {/* Navigation Menu (Module Item Clicks navigate; clicking between icons does NOT open sidebar) */}
       <nav className="sidebar-menu">
         {MODULES.map((item) => {
           const Icon = item.icon;
@@ -97,8 +85,7 @@ export default function Sidebar({
             <div
               key={item.id}
               className={`menu-item ${isActive ? 'active' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
                 setActiveModule(item.id);
                 setMobileOpen(false);
               }}
@@ -118,6 +105,14 @@ export default function Sidebar({
           );
         })}
       </nav>
+
+      {/* Empty space below icons (Clicking here opens/collapses sidebar) */}
+      <div 
+        className="sidebar-empty-click-area"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        style={{ flex: 1, cursor: 'pointer', minHeight: '40px' }}
+        title={isCollapsed ? "Click empty space to expand sidebar" : "Click empty space to collapse sidebar"}
+      />
 
       {/* User Profile Card in Sidebar */}
       {!isCollapsed ? (

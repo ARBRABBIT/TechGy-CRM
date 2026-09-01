@@ -27,11 +27,11 @@ import {
 import { REVENUE_DATA, INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
 
 export default function DashboardView({ 
-  leads, 
-  accounts, 
-  activities, 
-  selectedOwnerFilter, 
-  selectedDateFilter,
+  leads = [], 
+  accounts = [], 
+  activities = [], 
+  selectedOwnerFilter = 'All Owners', 
+  selectedDateFilter = 'This Month',
   onNavigateToLeads,
   onNavigateToAccounts,
   onNavigateToActivities,

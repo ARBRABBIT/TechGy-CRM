@@ -545,3 +545,76 @@ export const INITIAL_CONTACTS = [
     lastContacted: 'None'
   }
 ];
+
+export const INITIAL_NOTIFICATIONS = [
+  {
+    id: 'NOTIF-1',
+    title: 'Follow-up Overdue',
+    message: 'Follow-up call with Vikram Malhotra (Tata Consultancy Tech Ltd) is 2 days overdue.',
+    timestamp: '10 mins ago',
+    category: 'Overdue',
+    isRead: false,
+    priority: 'High',
+    targetModule: 'leads'
+  },
+  {
+    id: 'NOTIF-2',
+    title: 'Opportunity Won',
+    message: 'Reliance Cloud Solutions accepted proposal #PR-902 (₹3.2 Cr) and moved to Won stage.',
+    timestamp: '45 mins ago',
+    category: 'Opportunity',
+    isRead: false,
+    priority: 'High',
+    targetModule: 'opportunities'
+  },
+  {
+    id: 'NOTIF-3',
+    title: 'New Lead Assigned',
+    message: 'Rajesh Sharma assigned a new lead: Infosys Enterprise Systems.',
+    timestamp: '2 hours ago',
+    category: 'Lead',
+    isRead: false,
+    priority: 'Normal',
+    targetModule: 'leads'
+  },
+  {
+    id: 'NOTIF-4',
+    title: 'Activity Scheduled',
+    message: 'Product demo meeting with Priya Patel scheduled for today at 3:30 PM.',
+    timestamp: '3 hours ago',
+    category: 'Activity',
+    isRead: false,
+    priority: 'Normal',
+    targetModule: 'activities'
+  },
+  {
+    id: 'NOTIF-5',
+    title: 'Proposal Viewed',
+    message: 'Mahindra Tech Solutions opened commercial proposal #PR-904.',
+    timestamp: '5 hours ago',
+    category: 'Proposal',
+    isRead: false,
+    priority: 'Normal',
+    targetModule: 'proposals'
+  },
+  {
+    id: 'NOTIF-6',
+    title: 'New Contact Added',
+    message: 'Siddharth Varma added as Key Decision Maker for Bharti Cloud Ltd.',
+    timestamp: 'Yesterday',
+    category: 'Contact',
+    isRead: false,
+    priority: 'Normal',
+    targetModule: 'contacts'
+  },
+  {
+    id: 'NOTIF-7',
+    title: 'Inbound Web Inquiry',
+    message: 'Aarav Mehta submitted a high-value inquiry from Website landing page.',
+    timestamp: 'Yesterday',
+    category: 'Lead',
+    isRead: false,
+    priority: 'Normal',
+    targetModule: 'leads'
+  }
+];

@@ -13,6 +13,7 @@ import {
   X
 } from 'lucide-react';
 import { INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
+import NotificationsPopover from './NotificationsPopover';
 
 export default function GlobalHeader({
   activeModule,
@@ -30,9 +31,15 @@ export default function GlobalHeader({
   proposals = [],
   contacts = [],
   activities = [],
-  onSelectSearchResult
+  onSelectSearchResult,
+  notifications = [],
+  onMarkAsRead,
+  onMarkAllAsRead,
+  onClearAll,
+  onSelectNotification
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const searchContainerRef = useRef(null);
 
   const getModuleTitle = () => {
@@ -312,11 +319,33 @@ export default function GlobalHeader({
           <span>Create New</span>
         </button>
 
-        {/* Notification Icon */}
-        <button className="icon-button" title="Notifications">
-          <Bell size={18} />
-          <span className="notification-badge">7</span>
-        </button>
+        {/* Notification Icon & Popover */}
+        <div style={{ position: 'relative' }}>
+          <button
+            className="icon-button"
+            title="Notifications"
+            onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+          >
+            <Bell size={18} />
+            {notifications.filter(n => !n.isRead).length > 0 && (
+              <span className="notification-badge">
+                {notifications.filter(n => !n.isRead).length}
+              </span>
+            )}
+          </button>
+          <NotificationsPopover
+            isOpen={isNotificationOpen}
+            onClose={() => setIsNotificationOpen(false)}
+            notifications={notifications}
+            onMarkAsRead={onMarkAsRead}
+            onMarkAllAsRead={onMarkAllAsRead}
+            onClearAll={onClearAll}
+            onNotificationClick={(item) => {
+              setIsNotificationOpen(false);
+              if (onSelectNotification) onSelectNotification(item);
+            }}
+          />
+        </div>
       </div>
     </header>
   );
