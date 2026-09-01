@@ -55,13 +55,20 @@ export default function ActivitiesView({ activities = [], searchQuery = '', sele
           ))}
         </div>
 
-        <div className="timeline">
+        <div className="timeline" key={activeTab}>
           {filteredActivities.map((act) => (
             <div key={act.id} className="timeline-item">
               <div className="timeline-icon">
                 {getIcon(act.type)}
               </div>
-              <div className="timeline-card" style={act.isOverdue ? { borderLeft: '3px solid #063669', backgroundColor: '#F9F9F9' } : {}}>
+              <div
+                className={`timeline-card ${act.isOverdue ? 'action-card' : ''}`}
+                style={
+                  act.isOverdue
+                    ? { border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', borderRadius: '10px' }
+                    : { border: 'none', backgroundColor: '#F9F9F9' }
+                }
+              >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#063669' }}>{act.type}</span>

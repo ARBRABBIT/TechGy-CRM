@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  IndianRupee, 
-  TrendingUp, 
-  Users, 
-  Building2, 
-  AlertTriangle, 
+import {
+  IndianRupee,
+  TrendingUp,
+  Users,
+  Building2,
+  AlertTriangle,
   CheckSquare,
   Clock,
   ArrowUpRight,
@@ -12,25 +12,25 @@ import {
   PieChart as PieIcon,
   ChevronRight
 } from 'lucide-react';
-import { 
-  ResponsiveContainer, 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  CartesianGrid, 
-  PieChart, 
-  Pie, 
-  Cell 
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 import { REVENUE_DATA, INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
 
-export default function DashboardView({ 
-  leads = [], 
-  accounts = [], 
-  activities = [], 
-  selectedOwnerFilter = 'All Owners', 
+export default function DashboardView({
+  leads = [],
+  accounts = [],
+  activities = [],
+  selectedOwnerFilter = 'All Owners',
   selectedDateFilter = 'This Month',
   onNavigateToLeads,
   onNavigateToAccounts,
@@ -38,7 +38,7 @@ export default function DashboardView({
   onSelectLead
 }) {
   const [revenueToggle, setRevenueToggle] = useState('Monthly');
-  
+
   // Dedicated Marketing Card Filter States (As mandated in PDF: "filters by date and owner")
   const [marketingDateFilter, setMarketingDateFilter] = useState(selectedDateFilter);
   const [marketingOwnerFilter, setMarketingOwnerFilter] = useState(selectedOwnerFilter);
@@ -80,7 +80,7 @@ export default function DashboardView({
     const matchDate = isDateMatch(l.createdDate) || isDateMatch(l.nextFollowup);
     return matchOwner && matchDate;
   });
-  
+
   const filteredAccounts = accounts.filter(a =>
     selectedOwnerFilter === 'All Owners' || a.accountOwner === selectedOwnerFilter
   );
@@ -180,7 +180,7 @@ export default function DashboardView({
 
       {/* Top 3 Revenue KPI Cards */}
       <div className="revenue-grid">
-        <div 
+        <div
           className="kpi-card"
           onClick={() => onNavigateToLeads()}
           title="Click to view revenue records in Leads"
@@ -197,7 +197,7 @@ export default function DashboardView({
           </div>
         </div>
 
-        <div 
+        <div
           className="kpi-card"
           onClick={() => onNavigateToLeads()}
           title="Click to view quarterly revenue details"
@@ -214,7 +214,7 @@ export default function DashboardView({
           </div>
         </div>
 
-        <div 
+        <div
           className="kpi-card"
           onClick={() => onNavigateToLeads()}
           title="Click to view Financial Year revenue details"
@@ -237,9 +237,9 @@ export default function DashboardView({
         {/* Revenue Trend Line Chart */}
         <div className="chart-card">
           <div className="chart-header">
-            <div>
-              <h3 className="chart-title">Revenue Trend ({revenueToggle})</h3>
-              <div style={{ fontSize: '0.775rem', color: '#557396' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.05rem' }}>
+              <h3 className="chart-title" style={{ margin: 0, lineHeight: 1.2 }}>Revenue Trend ({revenueToggle})</h3>
+              <div style={{ fontSize: '0.775rem', color: '#557396', margin: 0, lineHeight: 1.2 }}>
                 Revenue movement across selected period: {selectedDateFilter}
               </div>
             </div>
@@ -262,23 +262,37 @@ export default function DashboardView({
                 <CartesianGrid strokeDasharray="3 3" stroke="#E0E6EE" />
                 <XAxis dataKey="period" stroke="#557396" fontSize={12} />
                 <YAxis stroke="#557396" fontSize={12} tickFormatter={formatYAxis} />
-                <Tooltip 
-                  formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, 'Revenue']}
-                  contentStyle={{ backgroundColor: '#063669', borderRadius: '8px', color: 'white', border: 'none' }}
+                <Tooltip
+                  formatter={(value, name) => [
+                    `₹${value.toLocaleString('en-IN')}`,
+                    name === 'target' || name === 'Target' ? 'Target' : 'Revenue'
+                  ]}
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '10px',
+                    color: '#063669',
+                    border: '1px solid #E2E8F0',
+                    boxShadow: '0 6px 16px rgba(6, 54, 105, 0.12)',
+                    padding: '0.65rem 0.85rem'
+                  }}
+                  itemStyle={{ color: '#063669', fontWeight: 600, fontSize: '0.85rem' }}
+                  labelStyle={{ color: '#063669', fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.25rem' }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="revenue" 
-                  stroke="#063669" 
-                  strokeWidth={3} 
+                <Line
+                  name="Revenue"
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#063669"
+                  strokeWidth={3}
                   dot={{ r: 5, fill: '#063669', strokeWidth: 2, stroke: '#FFFFFF' }}
                   activeDot={{ r: 7 }}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="target" 
-                  stroke="#557396" 
-                  strokeWidth={2} 
+                <Line
+                  name="Target"
+                  type="monotone"
+                  dataKey="target"
+                  stroke="#557396"
+                  strokeWidth={2}
                   strokeDasharray="4 4"
                   dot={false}
                 />
@@ -289,19 +303,18 @@ export default function DashboardView({
 
         {/* Marketing Lead Source Mix Donut Chart - PDF Required Card Filters: Date & Owner */}
         <div className="chart-card">
-          <div className="chart-header" style={{ flexWrap: 'wrap', gap: '0.5rem' }}>
-            <div>
-              <h3 className="chart-title">Marketing</h3>
-              <div style={{ fontSize: '0.75rem', color: '#557396' }}>
+          <div className="chart-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'nowrap', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem', minWidth: 0 }}>
+              <h3 className="chart-title" style={{ margin: 0, lineHeight: 1.2 }}>Marketing</h3>
+              <div style={{ fontSize: '0.75rem', color: '#557396', margin: 0, lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 Lead Source / Acquisition Mix
               </div>
             </div>
-            
+
             {/* Card Specific Filters: Date & Owner */}
-            <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexShrink: 0 }}>
               <select
-                className="select-filter"
-                style={{ padding: '0.2rem 0.45rem', fontSize: '0.725rem', height: '28px' }}
+                className="select-filter card-select-filter"
                 value={marketingDateFilter}
                 onChange={(e) => setMarketingDateFilter(e.target.value)}
                 title="Filter Marketing by Date"
@@ -312,8 +325,7 @@ export default function DashboardView({
               </select>
 
               <select
-                className="select-filter"
-                style={{ padding: '0.2rem 0.45rem', fontSize: '0.725rem', height: '28px' }}
+                className="select-filter card-select-filter"
                 value={marketingOwnerFilter}
                 onChange={(e) => setMarketingOwnerFilter(e.target.value)}
                 title="Filter Marketing by Owner"
@@ -345,9 +357,18 @@ export default function DashboardView({
                     <Cell key={`cell-${index}`} fill={entry.color} stroke="#FFFFFF" strokeWidth={2} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   formatter={(value, name) => [`${value} leads`, name]}
-                  contentStyle={{ backgroundColor: '#063669', borderRadius: '8px', color: 'white' }}
+                  contentStyle={{
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '10px',
+                    color: '#063669',
+                    border: '1px solid #E2E8F0',
+                    boxShadow: '0 6px 16px rgba(6, 54, 105, 0.12)',
+                    padding: '0.65rem 0.85rem'
+                  }}
+                  itemStyle={{ color: '#063669', fontWeight: 600, fontSize: '0.85rem' }}
+                  labelStyle={{ color: '#063669', fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.25rem' }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -363,14 +384,22 @@ export default function DashboardView({
               <div style={{ fontSize: '0.65rem', color: '#557396', textTransform: 'uppercase' }}>Leads</div>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.35rem', marginTop: '0.5rem', fontSize: '0.75rem' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto auto',
+            columnGap: '8rem',
+            rowGap: '0.4rem',
+            justifyContent: 'center',
+            marginTop: '0.65rem',
+            fontSize: '0.8rem'
+          }}>
             {dynamicSourceMixData.map((item) => (
-              <div 
-                key={item.name} 
+              <div
+                key={item.name}
                 onClick={() => onNavigateToLeads(item.name)}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer' }}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: item.color, border: '1px solid #E0E6EE' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: item.color, border: '1px solid #E0E6EE', flexShrink: 0 }} />
                 <span style={{ color: '#063669' }}>{item.name}: <strong>{item.count}</strong></span>
               </div>
             ))}
@@ -380,7 +409,7 @@ export default function DashboardView({
 
       {/* Lead & Follow-up Summary: 4 KPI Counters Block */}
       <div className="counters-grid">
-        <div 
+        <div
           className="counter-card"
           onClick={() => onNavigateToAccounts()}
           title="Clicking opens Accounts list"
@@ -392,7 +421,7 @@ export default function DashboardView({
           <span className="counter-badge total">TOTAL</span>
         </div>
 
-        <div 
+        <div
           className="counter-card"
           onClick={() => onNavigateToLeads()}
           title="Clicking opens Leads list"
@@ -405,7 +434,7 @@ export default function DashboardView({
         </div>
 
         {/* OVERDUE LEADS - Alert Counter in Minimal #063669 & #F9F9F9 */}
-        <div 
+        <div
           className="counter-card alert-card"
           onClick={() => onNavigateToLeads('OVERDUE')}
           title="Clicking opens Leads filtered strictly to overdue records"
@@ -417,7 +446,7 @@ export default function DashboardView({
           <span className="counter-badge alert">ALERT</span>
         </div>
 
-        <div 
+        <div
           className="counter-card"
           onClick={() => onNavigateToActivities()}
           title="Clicking opens Today's Follow-ups in Activities"
@@ -458,8 +487,8 @@ export default function DashboardView({
             </thead>
             <tbody>
               {followUpActions.map((item) => (
-                <tr 
-                  key={item.id} 
+                <tr
+                  key={item.id}
                   className={item.isOverdue ? 'overdue-row' : ''}
                   onClick={() => onSelectLead(item)}
                 >
@@ -467,8 +496,8 @@ export default function DashboardView({
                   <td>{item.leadName}</td>
                   <td>{item.leadOwner}</td>
                   <td>
-                    <span style={{ 
-                      color: '#063669', 
+                    <span style={{
+                      color: '#063669',
                       fontWeight: 600,
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -483,7 +512,7 @@ export default function DashboardView({
                     </span>
                   </td>
                   <td>
-                    <button 
+                    <button
                       className="btn-secondary"
                       style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}
                       onClick={(e) => {

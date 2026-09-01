@@ -30,7 +30,7 @@ body {
   padding: 0;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden !important;
+  overflow-x: clip;
   font-family: var(--font-family);
 }
 
@@ -63,19 +63,48 @@ body {
   min-height: 100vh;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden !important;
+  overflow-x: clip;
 }
 
 /* Dynamic Page Transition Animations */
 @keyframes pageFadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(14px) scale(0.995);
+    transform: translateY(12px) scale(0.992);
   }
 
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tabSwitchFade {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iconPopEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.18) rotate(5deg);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -93,6 +122,7 @@ body {
 
 /* Apply Page Entrance Animation to All Screen Views & Full Page Detail Views */
 .content-body>div,
+.content-body>*,
 .dashboard-view,
 .leads-view,
 .accounts-view,
@@ -100,10 +130,17 @@ body {
 .activities-view,
 .proposals-view,
 .contacts-view,
+.profile-view,
 .lead-detail-page,
 .account-detail-page {
-  animation: pageFadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: pageFadeInUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: opacity, transform;
+}
+
+.timeline-item,
+.action-table tbody tr,
+.counter-card {
+  animation: tabSwitchFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Fixed Sidebar - Minimal #063669 & #F9F9F9 */
@@ -328,7 +365,6 @@ body {
   flex-direction: column;
   min-width: 0;
   max-width: calc(100% - 260px);
-  overflow-x: hidden;
   transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -337,19 +373,19 @@ body {
   max-width: calc(100% - 72px);
 }
 
-/* Global Header - Borderless */
+/* Global Header - Borderless Sticky Top Bar */
 .global-header {
   height: 64px;
   background-color: var(--bg-card);
   border-bottom: none;
-  box-shadow: 0 2px 10px rgba(6, 54, 105, 0.04);
+  box-shadow: 0 2px 10px rgba(6, 54, 105, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
   position: sticky;
   top: 0;
-  z-index: 40;
+  z-index: 100;
   width: 100%;
   max-width: 100%;
 }
@@ -482,13 +518,13 @@ body {
 
 /* Custom Styled Select Dropdown - Borderless */
 .select-filter {
-  padding: 0.45rem 1.65rem 0.45rem 0.75rem;
+  padding: 0.4rem 1.35rem 0.4rem 0.65rem;
   border-radius: 8px;
   border: none;
   background-color: #FFFFFF;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23063669' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23063669' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.55rem center;
+  background-position: right 0.45rem center;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -504,6 +540,13 @@ body {
 
 .select-filter:focus {
   box-shadow: 0 0 0 3px rgba(6, 54, 105, 0.1);
+}
+
+.card-select-filter {
+  padding: 0.35rem 1.25rem 0.35rem 0.6rem !important;
+  background-position: right 0.4rem center !important;
+  font-size: 0.775rem !important;
+  height: 32px !important;
 }
 
 .icon-button {
@@ -603,7 +646,7 @@ body {
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   color: white;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -672,15 +715,9 @@ body {
   border: none;
   padding: 1.25rem;
   box-shadow: 0 4px 14px rgba(6, 54, 105, 0.06);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
-  cursor: pointer;
+  cursor: default;
   min-width: 0;
   animation: cardPopIn 0.3s ease-out forwards;
-}
-
-.kpi-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px -4px rgba(6, 54, 105, 0.14);
 }
 
 .kpi-header {
@@ -772,32 +809,39 @@ body {
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-main);
+  margin: 0;
+  line-height: 1.2;
 }
 
 .toggle-group {
   display: flex;
   background-color: #F9F9F9;
-  padding: 3px;
+  padding: 4px;
   border-radius: 9999px;
   border: none;
   flex-shrink: 0;
+  gap: 4px;
 }
 
 .toggle-btn {
-  padding: 0.25rem 0.85rem;
+  padding: 0.5rem 1.15rem;
   border-radius: 9999px;
   border: none;
-  font-size: 0.775rem;
+  font-size: 0.825rem;
   font-weight: 600;
   color: var(--text-muted);
   background: transparent;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toggle-btn.active {
   background: #063669;
   color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(6, 54, 105, 0.2);
 }
 
 .chart-container {
@@ -838,9 +882,9 @@ body {
 }
 
 .counter-card.alert-card {
-  border: none;
-  background-color: #F9F9F9;
-  box-shadow: 0 4px 16px rgba(6, 54, 105, 0.09);
+  border: none !important;
+  background-color: #FFF5F5;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.12);
 }
 
 .counter-title {
@@ -853,7 +897,7 @@ body {
 }
 
 .counter-card.alert-card .counter-title {
-  color: #063669;
+  color: #991B1B;
   font-weight: 700;
 }
 
@@ -864,7 +908,7 @@ body {
 }
 
 .counter-card.alert-card .counter-value {
-  color: #063669;
+  color: #DC2626;
 }
 
 .counter-badge {
@@ -882,7 +926,7 @@ body {
 }
 
 .counter-badge.alert {
-  background: #063669;
+  background: #EF4444;
   color: #FFFFFF;
   border: none;
 }
@@ -900,7 +944,7 @@ body {
   border: none;
   padding: 1.25rem;
   box-shadow: 0 4px 14px rgba(6, 54, 105, 0.06);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -1211,15 +1255,47 @@ button,
   font-size: 0.7rem;
   color: #063669;
   box-shadow: 0 2px 6px rgba(6, 54, 105, 0.15);
+  animation: iconPopEntrance 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.timeline-item:nth-child(1) .timeline-icon {
+  animation-delay: 0.04s;
+}
+
+.timeline-item:nth-child(2) .timeline-icon {
+  animation-delay: 0.09s;
+}
+
+.timeline-item:nth-child(3) .timeline-icon {
+  animation-delay: 0.14s;
+}
+
+.timeline-item:nth-child(4) .timeline-icon {
+  animation-delay: 0.19s;
+}
+
+.timeline-item:nth-child(5) .timeline-icon {
+  animation-delay: 0.24s;
+}
+
+.timeline-item:nth-child(6) .timeline-icon {
+  animation-delay: 0.29s;
 }
 
 .timeline-card {
   background: #F9F9F9;
   border: none;
   border-radius: 8px;
-  padding: 0.875rem;
+  padding: 0.875rem 1.15rem;
   box-shadow: 0 2px 8px rgba(6, 54, 105, 0.04);
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.timeline-card.action-card {
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  border-radius: 10px;
 }
 
 .timeline-card:hover {

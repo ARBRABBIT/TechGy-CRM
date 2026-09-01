@@ -36,7 +36,8 @@ export default function GlobalHeader({
   onMarkAsRead,
   onMarkAllAsRead,
   onClearAll,
-  onSelectNotification
+  onSelectNotification,
+  onOpenProfile
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);

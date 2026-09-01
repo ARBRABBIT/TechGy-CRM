@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Plus, Edit2, UserPlus, CheckSquare, FileText, Calendar, Trash2 } from 'lucide-react';
 import { INITIAL_OWNERS, LEAD_SOURCES } from '../data/mockData';
 
@@ -18,6 +18,12 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
     nextAction: '',
     dueDate: '2026-09-02'
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      setActionType(initialType);
+    }
+  }, [initialType, isOpen]);
 
   if (!isOpen) return null;
 

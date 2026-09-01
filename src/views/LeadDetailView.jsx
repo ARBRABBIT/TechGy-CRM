@@ -1,34 +1,40 @@
-import React, { useState } from 'react';
-import { 
-  ChevronRight, 
-  Home, 
-  ArrowLeft, 
-  User, 
-  Building2, 
-  Phone, 
-  Mail, 
-  Clock, 
-  AlertTriangle, 
-  FileText, 
-  TrendingUp, 
-  Plus, 
-  CheckCircle2, 
+import React, { useState, useEffect } from 'react';
+import {
+  ChevronRight,
+  Home,
+  ArrowLeft,
+  User,
+  Building2,
+  Phone,
+  Mail,
+  Clock,
+  AlertTriangle,
+  FileText,
+  TrendingUp,
+  Plus,
+  CheckCircle2,
   Send,
   MessageSquare,
   DollarSign
 } from 'lucide-react';
 
-export default function LeadDetailView({ 
-  lead, 
-  onBack, 
-  onNavigateHome, 
+export default function LeadDetailView({
+  lead,
+  onBack,
+  onNavigateHome,
   onQuickAction,
-  onNavigateToAccount 
+  onNavigateToAccount
 }) {
   const [newNote, setNewNote] = useState('');
   const [notesList, setNotesList] = useState(
     lead.notes ? lead.notes.split('\n').filter(Boolean) : ['Initial lead inquiry received via website.']
   );
+
+  useEffect(() => {
+    if (lead.notes) {
+      setNotesList(lead.notes.split('\n').filter(Boolean));
+    }
+  }, [lead.notes]);
 
   const handleAddNote = (e) => {
     e.preventDefault();
@@ -45,16 +51,16 @@ export default function LeadDetailView({
       {/* 1. Breadcrumbs Navigation Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
-          <span 
-            onClick={onNavigateHome} 
+          <span
+            onClick={onNavigateHome}
             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
             title="Go to Home Dashboard"
           >
             <Home size={15} /> Home
           </span>
           <ChevronRight size={14} />
-          <span 
-            onClick={onBack} 
+          <span
+            onClick={onBack}
             style={{ cursor: 'pointer', color: '#063669' }}
             title="Return to Leads Directory"
           >
@@ -65,10 +71,6 @@ export default function LeadDetailView({
             {lead.leadName} ({lead.company})
           </span>
         </nav>
-
-        <button className="btn-secondary" onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <ArrowLeft size={16} /> Back to Leads
-        </button>
       </div>
 
       {/* 2. Top Banner Summary Header */}
@@ -91,34 +93,58 @@ export default function LeadDetailView({
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem', zIndex: 2, flexWrap: 'wrap' }}>
-          <button 
-            className="btn-primary" 
+          <button
+            className="btn-primary"
             style={{ background: '#FFFFFF', color: '#063669', borderColor: '#FFFFFF', fontWeight: 700 }}
             onClick={() => onQuickAction('convertOpportunity', lead)}
           >
             <TrendingUp size={16} /> Convert to Opportunity
           </button>
-          <button 
-            className="btn-secondary"
-            style={{ background: 'rgba(255,255,255,0.15)', color: '#FFFFFF', borderColor: 'rgba(255,255,255,0.3)' }}
-            onClick={() => onQuickAction('addNote', lead)}
-          >
-            <Plus size={16} /> Add Note
-          </button>
         </div>
       </div>
 
       {/* 3. Main Content Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
         {/* Left Column - Main Details */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
           {/* Key Contact Information Card */}
-          <div className="section-card">
-            <div className="section-header">
+          <div className="section-card" style={{ marginBottom: 0 }}>
+            <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 className="section-title">Lead Contact Information</h3>
+              <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                <button
+                  className="icon-button"
+                  title="Log Phone Call"
+                  aria-label="Log Phone Call"
+                  onClick={() => onQuickAction('call', lead)}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FFFFFF', border: '1px solid #E0E6EE', color: '#063669', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(6, 54, 105, 0.05)' }}
+                >
+                  <Phone size={15} />
+                </button>
+
+                <button
+                  className="icon-button"
+                  title="Log Email Sent"
+                  aria-label="Log Email Sent"
+                  onClick={() => onQuickAction('email', lead)}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FFFFFF', border: '1px solid #E0E6EE', color: '#063669', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(6, 54, 105, 0.05)' }}
+                >
+                  <Mail size={15} />
+                </button>
+
+                <button
+                  className="icon-button"
+                  title="Log WhatsApp / SMS"
+                  aria-label="Log WhatsApp / SMS"
+                  onClick={() => onQuickAction('sms', lead)}
+                  style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#FFFFFF', border: '1px solid #E0E6EE', color: '#063669', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 6px rgba(6, 54, 105, 0.05)' }}
+                >
+                  <MessageSquare size={15} />
+                </button>
+              </div>
             </div>
-            
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
               <div className="drawer-field-group">
                 <div className="field-label">Full Name</div>
@@ -127,8 +153,8 @@ export default function LeadDetailView({
 
               <div className="drawer-field-group">
                 <div className="field-label">Company Account</div>
-                <div 
-                  className="field-value" 
+                <div
+                  className="field-value"
                   style={{ fontWeight: 700, color: '#063669', textDecoration: 'underline', cursor: 'pointer' }}
                   onClick={() => onNavigateToAccount(lead.company)}
                 >
@@ -177,49 +203,25 @@ export default function LeadDetailView({
             </div>
           </div>
 
-          {/* Sales Pipeline Progression Progress Bar */}
-          <div className="section-card">
-            <div className="section-header">
-              <h3 className="section-title">Sales Pipeline Stage Progress</h3>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginTop: '0.5rem' }}>
-              {stages.map((stg, idx) => {
-                const isPassed = idx <= currentStageIndex;
-                const isCurrent = idx === currentStageIndex;
-                return (
-                  <div key={stg} style={{ flex: 1, textAlign: 'center' }}>
-                    <div style={{
-                      height: '8px',
-                      borderRadius: '4px',
-                      backgroundColor: isPassed ? '#063669' : '#E0E6EE',
-                      marginBottom: '0.5rem',
-                      transition: 'all 0.3s'
-                    }} />
-                    <span style={{ 
-                      fontSize: '0.75rem', 
-                      fontWeight: isCurrent ? 700 : 500,
-                      color: isPassed ? '#063669' : '#557396'
-                    }}>
-                      {stg}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Notes & Requirements History */}
-          <div className="section-card">
-            <div className="section-header">
+          <div className="section-card" style={{ marginBottom: 0 }}>
+            <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
               <h3 className="section-title">Notes & Logged Requirements</h3>
+              <button 
+                className="btn-primary" 
+                style={{ fontSize: '0.8rem', padding: '0.45rem 1.1rem', borderRadius: '20px', display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 600 }}
+                onClick={() => onQuickAction('addNote', lead)}
+              >
+                <Plus size={15} /> Add Note
+              </button>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: 0 }}>
               {notesList.map((noteItem, idx) => (
-                <div key={idx} style={{ 
-                  background: '#F9F9F9', 
-                  border: '1px solid #E0E6EE', 
-                  borderRadius: '8px', 
+                <div key={idx} style={{
+                  background: '#F9F9F9',
+                  border: '1px solid #E0E6EE',
+                  borderRadius: '8px',
                   padding: '0.875rem',
                   fontSize: '0.875rem',
                   color: '#063669'
@@ -228,79 +230,60 @@ export default function LeadDetailView({
                 </div>
               ))}
             </div>
-
-            {/* Append New Note Form */}
-            <form onSubmit={handleAddNote} style={{ display: 'flex', gap: '0.75rem' }}>
-              <input 
-                type="text"
-                className="form-input"
-                placeholder="Type a quick note or meeting update..."
-                value={newNote}
-                onChange={(e) => setNewNote(e.target.value)}
-              />
-              <button type="submit" className="btn-primary" style={{ whiteSpace: 'nowrap' }}>
-                <Send size={15} /> Add Note
-              </button>
-            </form>
           </div>
         </div>
 
-        {/* Right Sidebar Column - Quick Actions & Lead Details */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          
-          {/* Quick Actions Panel */}
-          <div className="section-card">
-            <h3 className="section-title" style={{ marginBottom: '1rem' }}>Quick Actions</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-              <button 
-                className="btn-secondary" 
-                style={{ width: '100%', justifyContent: 'flex-start' }}
-                onClick={() => onQuickAction('call', lead)}
-              >
-                <Phone size={16} /> Log Phone Call
-              </button>
-              <button 
-                className="btn-secondary" 
-                style={{ width: '100%', justifyContent: 'flex-start' }}
-                onClick={() => onQuickAction('email', lead)}
-              >
-                <Mail size={16} /> Log Email Sent
-              </button>
-              <button 
-                className="btn-secondary" 
-                style={{ width: '100%', justifyContent: 'flex-start' }}
-                onClick={() => onQuickAction('sms', lead)}
-              >
-                <MessageSquare size={16} /> Log WhatsApp / SMS
-              </button>
-              <button 
-                className="btn-primary" 
-                style={{ width: '100%', justifyContent: 'flex-start', marginTop: '0.5rem' }}
-                onClick={() => onQuickAction('convertOpportunity', lead)}
-              >
-                <TrendingUp size={16} /> Convert to Opportunity
-              </button>
-            </div>
-          </div>
+        {/* Right Sidebar Column - Sales Pipeline Stage Progress Tracker */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
 
-          {/* Account Summary Widget */}
-          <div className="section-card">
-            <h3 className="section-title" style={{ marginBottom: '0.75rem' }}>Company Account</h3>
-            <div style={{ background: '#F9F9F9', border: '1px solid #E0E6EE', borderRadius: '8px', padding: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <Building2 size={18} style={{ color: '#063669' }} />
-                <span style={{ fontWeight: 700, fontSize: '1rem', color: '#063669' }}>{lead.company}</span>
-              </div>
-              <p style={{ fontSize: '0.8rem', color: '#557396', margin: '0 0 0.75rem 0' }}>
-                View full enterprise account profile, linked deals, proposals, and contacts.
-              </p>
-              <button 
-                className="btn-secondary" 
-                style={{ width: '100%', fontSize: '0.8rem' }}
-                onClick={() => onNavigateToAccount(lead.company)}
-              >
-                Inspect Account Profile <ChevronRight size={14} />
-              </button>
+          {/* Sales Pipeline Stage Progress Card */}
+          <div className="section-card" style={{ marginBottom: 0 }}>
+            <h3 className="section-title" style={{ marginBottom: '0.75rem' }}>Sales Pipeline Stage Progress</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {stages.map((stg, idx) => {
+                const isPassed = idx <= currentStageIndex;
+                const isCurrent = idx === currentStageIndex;
+                return (
+                  <div key={stg} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '0.5rem 0.75rem',
+                    borderRadius: '8px',
+                    backgroundColor: isCurrent ? '#063669' : isPassed ? '#F9F9F9' : '#FFFFFF',
+                    border: isCurrent ? '1px solid #063669' : '1px solid #E0E6EE',
+                    transition: 'all 0.2s'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
+                      <div style={{
+                        width: '10px',
+                        height: '10px',
+                        borderRadius: '50%',
+                        backgroundColor: isCurrent ? '#FFFFFF' : isPassed ? '#063669' : '#C0D0E0'
+                      }} />
+                      <span style={{
+                        fontSize: '0.8rem',
+                        fontWeight: isCurrent ? 700 : 500,
+                        color: isCurrent ? '#FFFFFF' : isPassed ? '#063669' : '#557396'
+                      }}>
+                        {stg}
+                      </span>
+                    </div>
+                    {isCurrent && (
+                      <span style={{
+                        fontSize: '0.65rem',
+                        fontWeight: 700,
+                        color: '#FFFFFF',
+                        backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                        padding: '0.1rem 0.45rem',
+                        borderRadius: '4px'
+                      }}>
+                        Active
+                      </span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 

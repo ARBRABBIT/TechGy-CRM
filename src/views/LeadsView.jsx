@@ -9,7 +9,8 @@ import {
   Mail,
   Clock,
   AlertTriangle,
-  ChevronRight
+  ChevronRight,
+  ArrowLeft
 } from 'lucide-react';
 import { LEAD_SOURCES, INITIAL_OWNERS } from '../data/mockData';
 
@@ -19,7 +20,9 @@ export default function LeadsView({
   onOpenCreateModal,
   initialFilterSource = '',
   initialOverdueOnly = false,
-  searchQuery = ''
+  searchQuery = '',
+  fromDashboard = false,
+  onBackToDashboard
 }) {
   const [localSearch, setLocalSearch] = useState('');
   const [sourceFilter, setSourceFilter] = useState(initialFilterSource);
@@ -68,6 +71,29 @@ export default function LeadsView({
 
   return (
     <div className="leads-view">
+      {/* Conditional Breadcrumbs when redirected from Dashboard */}
+      {fromDashboard && (
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.85rem' }}>
+          <span style={{ fontSize: '0.9rem', color: '#557396', fontWeight: 500, display: 'inline-flex', alignItems: 'center' }}>
+            <span
+              onClick={onBackToDashboard}
+              style={{
+                color: '#063669',
+                cursor: 'pointer',
+                fontWeight: 600,
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px'
+              }}
+              title="Click to return to Dashboard"
+            >
+              Dashboard
+            </span>
+            <span style={{ color: '#557396', margin: '0 0.65rem', fontWeight: 500 }}>&gt;</span>
+            <strong style={{ color: '#063669', fontWeight: 700 }}>Leads Directory & Sales Pipeline</strong>
+          </span>
+        </div>
+      )}
+
       {/* Banner */}
       <div className="dashboard-banner">
         <div className="banner-text">

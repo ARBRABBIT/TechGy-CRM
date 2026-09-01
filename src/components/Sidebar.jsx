@@ -29,7 +29,8 @@ export default function Sidebar({
   mobileOpen, 
   setMobileOpen,
   isCollapsed,
-  setIsCollapsed
+  setIsCollapsed,
+  onOpenProfile
 }) {
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
@@ -43,8 +44,8 @@ export default function Sidebar({
         >
           {/* Logo Box with Hover Reveal Button */}
           <div className="brand-logo-wrapper">
-            <div className="brand-logo" title="TechGy CRM">
-              <ShieldCheck size={20} />
+            <div className="brand-logo" title="TechGy Link">
+              <img src="/vector.png" alt="TechGy Link Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
             </div>
             <button 
               className="sidebar-collapse-hover-btn"
@@ -60,7 +61,7 @@ export default function Sidebar({
 
           {!isCollapsed && (
             <div className="brand-text">
-              <span className="brand-title">TechGy CRM</span>
+              <span className="brand-title">TechGy Link</span>
               <div className="brand-subtitle">Internal Workspace</div>
             </div>
           )}
@@ -127,11 +128,10 @@ export default function Sidebar({
             background: 'transparent',
             cursor: 'pointer'
           }}
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
+          onClick={() => {
+            if (onOpenProfile) onOpenProfile();
           }}
-          title="Click profile to toggle sidebar"
+          title="View My Profile"
         >
           <div 
             className="avatar" 
@@ -171,10 +171,9 @@ export default function Sidebar({
             justifyContent: 'center',
             cursor: 'pointer'
           }} 
-          title="Click profile to toggle sidebar"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsCollapsed(!isCollapsed);
+          title="View My Profile"
+          onClick={() => {
+            if (onOpenProfile) onOpenProfile();
           }}
         >
           <div 

@@ -15,6 +15,7 @@ import ContactsView from './views/ContactsView';
 // Dedicated Full-Page Detail Views with Interactive Breadcrumb Navigation
 import LeadDetailView from './views/LeadDetailView';
 import AccountDetailView from './views/AccountDetailView';
+import ProfileView from './views/ProfileView';
 
 // Initial Mock Data
 import {
@@ -52,6 +53,8 @@ export default function App() {
   // Dedicated Full Page Selection States (Replaces side drawers)
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [isProfileActive, setIsProfileActive] = useState(false);
+  const [fromDashboard, setFromDashboard] = useState(false);
 
   // Create Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -60,6 +63,13 @@ export default function App() {
   // Interactive View Filter State
   const [leadsSourceFilter, setLeadsSourceFilter] = useState('');
   const [leadsOverdueOnly, setLeadsOverdueOnly] = useState(false);
+
+  const handleOpenProfile = () => {
+    setSelectedLead(null);
+    setSelectedAccount(null);
+    setIsProfileActive(true);
+    setFromDashboard(false);
+  };
 
   const triggerToast = (msg) => {
     setToastMessage(msg);
@@ -100,6 +110,8 @@ export default function App() {
   const handleSelectNotification = (notif) => {
     setSelectedLead(null);
     setSelectedAccount(null);
+    setIsProfileActive(false);
+    setFromDashboard(false);
     if (notif.targetModule) {
       setActiveModule(notif.targetModule);
     }
@@ -109,6 +121,8 @@ export default function App() {
   const handleNavigateToLeads = (source = '', overdue = false) => {
     setSelectedLead(null);
     setSelectedAccount(null);
+    setIsProfileActive(false);
+    setFromDashboard(true);
     if (source === 'OVERDUE') {
       setLeadsOverdueOnly(true);
       setLeadsSourceFilter('');
@@ -122,23 +136,31 @@ export default function App() {
   const handleNavigateToAccounts = () => {
     setSelectedLead(null);
     setSelectedAccount(null);
+    setIsProfileActive(false);
+    setFromDashboard(false);
     setActiveModule('accounts');
   };
 
   const handleNavigateToActivities = () => {
     setSelectedLead(null);
     setSelectedAccount(null);
+    setIsProfileActive(false);
+    setFromDashboard(false);
     setActiveModule('activities');
   };
 
   const handleSelectModule = (mod) => {
     setSelectedLead(null);
     setSelectedAccount(null);
+    setIsProfileActive(false);
+    setFromDashboard(false);
     setActiveModule(mod);
   };
 
   // Universal Search Result Navigation Handler
   const handleSelectSearchResult = (category, item) => {
+    setIsProfileActive(false);
+    setFromDashboard(false);
     if (category === 'lead') {
       setSelectedAccount(null);
       setSelectedLead(item);
@@ -201,6 +223,7 @@ export default function App() {
     if (parentAcc) {
       setSelectedLead(null);
       setSelectedAccount(parentAcc);
+      setIsProfileActive(false);
       setActiveModule('accounts');
     } else {
       alert(`Account record for "${companyName}" not found.`);
@@ -251,23 +274,36 @@ export default function App() {
         };
         setAccounts([newAcc, ...accounts]);
       }
-    } else if (type === 'addNote' && selectedLead) {
-      const updatedLeads = leads.map(l => l.id === selectedLead.id ? { ...l, notes: `${l.notes}\n• ${formData.notes}` } : l);
-      setLeads(updatedLeads);
-      pushNotification('Note Added', `Added note to lead ${selectedLead.leadName}`, 'Lead', 'leads');
+    } else if (type === 'addNote') {
+      const noteText = formData.notes || 'Note added to lead record';
+      const targetLead = selectedLead || leads[0];
+      if (targetLead) {
+        const updatedNotes = `${targetLead.notes || ''}\n• ${noteText}`;
+        const updatedLeads = leads.map(l => l.id === targetLead.id ? { ...l, notes: updatedNotes } : l);
+        setLeads(updatedLeads);
+        if (selectedLead && selectedLead.id === targetLead.id) {
+          setSelectedLead({ ...selectedLead, notes: updatedNotes });
+        }
+        pushNotification('Note Added', `Added note to lead ${targetLead.leadName}`, 'Lead', 'leads');
+      }
     } else if (type === 'assignOwner' && selectedLead) {
       const updatedLeads = leads.map(l => l.id === selectedLead.id ? { ...l, leadOwner: formData.owner } : l);
       setLeads(updatedLeads);
+      if (selectedLead) {
+        setSelectedLead({ ...selectedLead, leadOwner: formData.owner });
+      }
       pushNotification('Owner Reassigned', `Assigned ${selectedLead.leadName} to ${formData.owner}`, 'Lead', 'leads');
     }
   };
 
   // Generate unique view key to trigger smooth CSS page transition keyframes on every page change
-  const currentViewKey = selectedLead
-    ? `lead-detail-${selectedLead.id}`
-    : selectedAccount
-      ? `account-detail-${selectedAccount.id}`
-      : `module-${activeModule}`;
+  const currentViewKey = isProfileActive
+    ? 'user-profile'
+    : selectedLead
+      ? `lead-detail-${selectedLead.id}`
+      : selectedAccount
+        ? `account-detail-${selectedAccount.id}`
+        : `module-${activeModule}`;
 
   return (
     <div className="app-container">
@@ -279,6 +315,7 @@ export default function App() {
         setMobileOpen={setMobileOpen}
         isCollapsed={isSidebarCollapsed}
         setIsCollapsed={setIsSidebarCollapsed}
+        onOpenProfile={handleOpenProfile}
       />
 
       {/* Main App Section */}
@@ -309,12 +346,33 @@ export default function App() {
           onMarkAllAsRead={handleMarkAllAsRead}
           onClearAll={handleClearAllNotifications}
           onSelectNotification={handleSelectNotification}
+          onOpenProfile={handleOpenProfile}
         />
 
         {/* 3. Main Page Content with Keyed Dynamic Transition */}
         <main className="content-body" key={currentViewKey}>
-          {/* Full Page Lead Detail View with Breadcrumb Navigation */}
-          {selectedLead ? (
+          {/* User Profile View */}
+          {isProfileActive ? (
+            <ProfileView
+              onBack={() => setIsProfileActive(false)}
+              onNavigateHome={() => {
+                setIsProfileActive(false);
+                setActiveModule('dashboard');
+              }}
+              leads={leads}
+              accounts={accounts}
+              opportunities={opportunities}
+              onSelectLead={(lead) => {
+                setIsProfileActive(false);
+                setSelectedLead(lead);
+              }}
+              onSelectAccount={(acc) => {
+                setIsProfileActive(false);
+                setSelectedAccount(acc);
+                setActiveModule('accounts');
+              }}
+            />
+          ) : selectedLead ? (
             <LeadDetailView
               lead={selectedLead}
               onBack={() => setSelectedLead(null)}
@@ -391,6 +449,11 @@ export default function App() {
                   onClearFilters={() => {
                     setLeadsSourceFilter('');
                     setLeadsOverdueOnly(false);
+                  }}
+                  fromDashboard={fromDashboard}
+                  onBackToDashboard={() => {
+                    setFromDashboard(false);
+                    setActiveModule('dashboard');
                   }}
                 />
               )}
