@@ -17,7 +17,8 @@ import {
   Briefcase,
   Users,
   Target,
-  FileText
+  FileText,
+  ChevronRight
 } from 'lucide-react';
 
 export default function ProfileView({
@@ -68,21 +69,19 @@ export default function ProfileView({
     <div className="profile-view" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
       {/* Top Breadcrumb Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <button
-            className="btn-secondary"
-            onClick={onBack || onNavigateHome}
-            style={{ padding: '0.4rem 0.85rem', fontSize: '0.8rem' }}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
+          <span
+            onClick={onNavigateHome}
+            style={{ cursor: 'pointer', color: '#063669' }}
+            title="Go to Dashboard"
           >
-            <ArrowLeft size={16} />
-            <span>Back</span>
-          </button>
-          <span style={{ fontSize: '0.85rem', color: '#557396', fontWeight: 500, display: 'inline-flex', alignItems: 'center' }}>
-            <span>Home</span>
-            <span style={{ color: '#557396', margin: '0 0.5rem' }}>&gt;</span>
-            <strong style={{ color: '#063669' }}>User Profile</strong>
+            Dashboard
           </span>
-        </div>
+          <ChevronRight size={14} />
+          <span style={{ color: '#063669', fontWeight: 700 }}>
+            User Profile & Settings
+          </span>
+        </nav>
       </div>
 
       {/* Hero Profile Banner Header */}

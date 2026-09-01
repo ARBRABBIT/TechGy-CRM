@@ -104,11 +104,15 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                   <div className="form-group">
                     <label className="form-label">Phone Number</label>
                     <input 
-                      type="text" 
+                      type="tel"
+                      inputMode="numeric"
                       className="form-input" 
                       placeholder="+91 98765 00000"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => {
+                        const numericOnly = e.target.value.replace(/[^0-9+\s-]/g, '');
+                        setFormData({ ...formData, phone: numericOnly });
+                      }}
                     />
                   </div>
                   <div className="form-group">

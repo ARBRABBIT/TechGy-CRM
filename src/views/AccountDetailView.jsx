@@ -1,32 +1,32 @@
 import React, { useState } from 'react';
-import { 
-  Home, 
-  ChevronRight, 
-  ArrowLeft, 
-  Building2, 
-  Globe, 
-  MapPin, 
-  Users, 
-  TrendingUp, 
-  FileText, 
-  Plus, 
-  Phone, 
-  Mail, 
-  Clock, 
-  IndianRupee 
+import {
+  Home,
+  ChevronRight,
+  ArrowLeft,
+  Building2,
+  Globe,
+  MapPin,
+  Users,
+  TrendingUp,
+  FileText,
+  Plus,
+  Phone,
+  Mail,
+  Clock,
+  IndianRupee
 } from 'lucide-react';
 
-export default function AccountDetailView({ 
-  account, 
-  onBack, 
-  onNavigateHome, 
-  leads = [], 
-  activities = [], 
-  contacts = [], 
-  opportunities = [], 
+export default function AccountDetailView({
+  account,
+  onBack,
+  onNavigateHome,
+  leads = [],
+  activities = [],
+  contacts = [],
+  opportunities = [],
   proposals = [],
   onSelectLead,
-  onOpenCreateModal 
+  onOpenCreateModal
 }) {
   const [activeTab, setActiveTab] = useState('Leads');
 
@@ -49,20 +49,20 @@ export default function AccountDetailView({
       {/* 1. Breadcrumbs Navigation Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
-          <span 
-            onClick={onNavigateHome} 
+          <span
+            onClick={onNavigateHome}
             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-            title="Go to Home Dashboard"
+            title="Go to Dashboard"
           >
-            <Home size={15} /> Home
+            Dashboard
           </span>
           <ChevronRight size={14} />
-          <span 
-            onClick={onBack} 
+          <span
+            onClick={onBack}
             style={{ cursor: 'pointer', color: '#063669' }}
-            title="Return to Accounts Directory"
+            title="Return to Accounts Directory & Client Portfolios"
           >
-            Accounts
+            Accounts Directory & Client Portfolios
           </span>
           <ChevronRight size={14} />
           <span style={{ color: '#063669', fontWeight: 700 }}>
@@ -72,7 +72,7 @@ export default function AccountDetailView({
       </div>
 
       {/* 2. Top Banner Header */}
-      <div className="dashboard-banner" style={{ marginBottom: '1.25rem', flexWrap: 'wrap', gap: '1rem' }}>
+      <div className="dashboard-banner" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div className="banner-text">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem' }}>
             <h2 style={{ fontSize: '1.4rem', margin: 0 }}>{account.companyName}</h2>
@@ -86,8 +86,8 @@ export default function AccountDetailView({
         </div>
 
         <div style={{ display: 'flex', gap: '0.75rem', zIndex: 2, flexWrap: 'wrap' }}>
-          <button 
-            className="btn-primary" 
+          <button
+            className="btn-primary"
             style={{ background: '#FFFFFF', color: '#063669', borderColor: '#FFFFFF', fontWeight: 700 }}
             onClick={() => onOpenCreateModal('createLead')}
           >
@@ -128,13 +128,13 @@ export default function AccountDetailView({
 
       {/* 4. Main Content Container */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-        
+
         {/* Account Profile Summary Card */}
-        <div className="section-card" style={{ marginBottom: '0.65rem' }}>
-          <div className="section-header" style={{ marginBottom: '1.25rem' }}>
+        <div className="section-card" style={{ marginBottom: '0.65rem', padding: '0.85rem 1.25rem' }}>
+          <div className="section-header" style={{ marginBottom: '0.65rem' }}>
             <h3 className="section-title">Company Profile</h3>
           </div>
-          
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
             <div className="drawer-field-group">
               <div className="field-label">Company Name</div>
@@ -176,16 +176,16 @@ export default function AccountDetailView({
         <div className="section-card">
           <div className="tab-header">
             {['Leads', 'Opportunities', 'Proposals', 'Contacts'].map(tab => (
-              <div 
-                key={tab} 
+              <div
+                key={tab}
                 className={`tab-item ${activeTab === tab ? 'active' : ''}`}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab} ({
                   tab === 'Leads' ? accountLeads.length :
-                  tab === 'Opportunities' ? accountOpps.length :
-                  tab === 'Proposals' ? accountProposals.length :
-                  accountContacts.length
+                    tab === 'Opportunities' ? accountOpps.length :
+                      tab === 'Proposals' ? accountProposals.length :
+                        accountContacts.length
                 })
               </div>
             ))}

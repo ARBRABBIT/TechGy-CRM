@@ -1,11 +1,11 @@
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Building2, 
-  TrendingUp, 
-  Calendar, 
-  FileText, 
+import {
+  LayoutDashboard,
+  Users,
+  Building2,
+  TrendingUp,
+  Calendar,
+  FileText,
   Contact,
   ShieldCheck,
   ChevronLeft,
@@ -23,10 +23,10 @@ const MODULES = [
   { id: 'contacts', index: '07', title: 'Contacts', icon: Contact, badge: null }
 ];
 
-export default function Sidebar({ 
-  activeModule, 
-  setActiveModule, 
-  mobileOpen, 
+export default function Sidebar({
+  activeModule,
+  setActiveModule,
+  mobileOpen,
   setMobileOpen,
   isCollapsed,
   setIsCollapsed,
@@ -36,8 +36,8 @@ export default function Sidebar({
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
       {/* Sidebar Header - Clicking Logo Box Toggles Sidebar */}
       <div className="sidebar-header">
-        <div 
-          className="brand-container" 
+        <div
+          className="brand-container"
           onClick={() => setIsCollapsed(!isCollapsed)}
           style={{ cursor: 'pointer' }}
           title={isCollapsed ? "Click to expand sidebar" : "Click to collapse sidebar"}
@@ -47,7 +47,7 @@ export default function Sidebar({
             <div className="brand-logo" title="TechGy Link">
               <img src="/vector.png" alt="TechGy Link Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
             </div>
-            <button 
+            <button
               className="sidebar-collapse-hover-btn"
               onClick={(e) => {
                 e.stopPropagation();
@@ -68,7 +68,7 @@ export default function Sidebar({
         </div>
 
         {mobileOpen && (
-          <button 
+          <button
             onClick={() => setMobileOpen(false)}
             style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
           >
@@ -108,7 +108,7 @@ export default function Sidebar({
       </nav>
 
       {/* Empty space below icons (Clicking here opens/collapses sidebar) */}
-      <div 
+      <div
         className="sidebar-empty-click-area"
         onClick={() => setIsCollapsed(!isCollapsed)}
         style={{ flex: 1, cursor: 'pointer', minHeight: '40px' }}
@@ -117,8 +117,8 @@ export default function Sidebar({
 
       {/* User Profile Card in Sidebar */}
       {!isCollapsed ? (
-        <div 
-          className="sidebar-profile" 
+        <div
+          className="sidebar-profile"
           style={{
             padding: '1rem',
             borderTop: 'none',
@@ -133,8 +133,8 @@ export default function Sidebar({
           }}
           title="View My Profile"
         >
-          <div 
-            className="avatar" 
+          <div
+            className="avatar"
             style={{
               width: '36px',
               height: '36px',
@@ -162,22 +162,22 @@ export default function Sidebar({
           </div>
         </div>
       ) : (
-        <div 
-          className="sidebar-profile collapsed" 
+        <div
+          className="sidebar-profile collapsed"
           style={{
             padding: '1rem 0',
             borderTop: 'none',
             display: 'flex',
             justifyContent: 'center',
             cursor: 'pointer'
-          }} 
+          }}
           title="View My Profile"
           onClick={() => {
             if (onOpenProfile) onOpenProfile();
           }}
         >
-          <div 
-            className="avatar" 
+          <div
+            className="avatar"
             style={{
               width: '36px',
               height: '36px',

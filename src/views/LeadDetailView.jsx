@@ -54,17 +54,17 @@ export default function LeadDetailView({
           <span
             onClick={onNavigateHome}
             style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-            title="Go to Home Dashboard"
+            title="Go to Dashboard"
           >
-            <Home size={15} /> Home
+            Dashboard
           </span>
           <ChevronRight size={14} />
           <span
             onClick={onBack}
             style={{ cursor: 'pointer', color: '#063669' }}
-            title="Return to Leads Directory"
+            title="Return to Leads Directory & Sales Pipeline"
           >
-            Leads
+            Leads Directory & Sales Pipeline
           </span>
           <ChevronRight size={14} />
           <span style={{ color: '#063669', fontWeight: 700 }}>

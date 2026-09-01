@@ -73,24 +73,20 @@ export default function LeadsView({
     <div className="leads-view">
       {/* Conditional Breadcrumbs when redirected from Dashboard */}
       {fromDashboard && (
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.85rem' }}>
-          <span style={{ fontSize: '0.9rem', color: '#557396', fontWeight: 500, display: 'inline-flex', alignItems: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
             <span
               onClick={onBackToDashboard}
-              style={{
-                color: '#063669',
-                cursor: 'pointer',
-                fontWeight: 600,
-                textDecoration: 'underline',
-                textUnderlineOffset: '3px'
-              }}
-              title="Click to return to Dashboard"
+              style={{ cursor: 'pointer', color: '#063669' }}
+              title="Go to Dashboard"
             >
               Dashboard
             </span>
-            <span style={{ color: '#557396', margin: '0 0.65rem', fontWeight: 500 }}>&gt;</span>
-            <strong style={{ color: '#063669', fontWeight: 700 }}>Leads Directory & Sales Pipeline</strong>
-          </span>
+            <ChevronRight size={14} />
+            <span style={{ color: '#063669', fontWeight: 700 }}>
+              Leads Directory & Sales Pipeline
+            </span>
+          </nav>
         </div>
       )}
 
