@@ -8,7 +8,9 @@ export default function ActivitiesView({
   selectedDateFilter = 'This Month',
   fromDashboard = false,
   onBackToDashboard,
-  initialTab = 'All'
+  initialTab = 'All',
+  onSelectLead,
+  onSelectAccount
 }) {
   const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -45,6 +47,14 @@ export default function ActivitiesView({
       case 'Follow-up': return <Clock size={14} />;
       case 'Meeting': return <Calendar size={14} />;
       default: return <Clock size={14} />;
+    }
+  };
+
+  const handleCardClick = (act) => {
+    if (act.lead && onSelectLead) {
+      onSelectLead(act.lead);
+    } else if (act.company && onSelectAccount) {
+      onSelectAccount(act.company);
     }
   };
 
@@ -99,17 +109,22 @@ export default function ActivitiesView({
               </div>
               <div
                 className={`timeline-card ${act.isOverdue ? 'action-card' : ''}`}
-                style={
-                  act.isOverdue
+                onClick={() => handleCardClick(act)}
+                title={`Click to open details for ${act.lead || act.company}`}
+                style={{
+                  cursor: 'pointer',
+                  ...(act.isOverdue
                     ? { border: '1px solid #E2E8F0', backgroundColor: '#FFFFFF', borderRadius: '10px' }
-                    : { border: 'none', backgroundColor: '#F9F9F9' }
-                }
+                    : { border: '1px solid transparent', backgroundColor: '#F9F9F9' })
+                }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#063669' }}>{act.type}</span>
                     <span style={{ fontSize: '0.8rem', color: '#557396' }}>with</span>
-                    <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>{act.lead || act.company}</span>
+                    <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#084482', textDecoration: 'underline' }}>
+                      {act.lead || act.company}
+                    </span>
                   </div>
                   <span style={{ fontSize: '0.75rem', color: '#557396', fontWeight: 500 }}>{act.date}</span>
                 </div>

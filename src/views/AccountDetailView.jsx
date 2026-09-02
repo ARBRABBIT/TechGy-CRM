@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Home,
   ChevronRight,
@@ -26,48 +26,148 @@ export default function AccountDetailView({
   opportunities = [],
   proposals = [],
   onSelectLead,
-  onOpenCreateModal
+  onOpenCreateModal,
+  navigationSource = 'accounts',
+  initialTab,
+  onNavigateToActivities,
+  onNavigateToProposals,
+  onNavigateToContacts
 }) {
-  const [activeTab, setActiveTab] = useState('Leads');
+  const [activeTab, setActiveTab] = useState(() => {
+    if (initialTab) return initialTab;
+    if (navigationSource === 'proposals') return 'Proposals';
+    return 'Leads';
+  });
 
-  // Filter linked items
-  const accountLeads = leads.filter(
-    l => l.company && l.company.toLowerCase() === account.companyName.toLowerCase()
-  );
-  const accountOpps = opportunities.filter(
-    o => o.accountName && o.accountName.toLowerCase() === account.companyName.toLowerCase()
-  );
-  const accountProposals = proposals.filter(
-    p => p.company && p.company.toLowerCase() === account.companyName.toLowerCase()
-  );
-  const accountContacts = contacts.filter(
-    c => c.company && c.company.toLowerCase() === account.companyName.toLowerCase()
-  );
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    } else if (navigationSource === 'proposals') {
+      setActiveTab('Proposals');
+    }
+  }, [initialTab, navigationSource]);
+
+  if (!account) {
+    return (
+      <div className="account-detail-page" style={{ padding: '2rem', textAlign: 'center' }}>
+        <h2>Account Not Found</h2>
+        <button className="btn-primary" onClick={onBack || onNavigateHome}>Back to Directory</button>
+      </div>
+    );
+  }
+
+  const compNameLower = (account.companyName || account.company || '').toLowerCase().trim();
+
+  // Filter linked items safely
+  const accountLeads = leads.filter(l => {
+    const c = (l.company || l.companyName || '').toLowerCase().trim();
+    return c && compNameLower && (c === compNameLower || c.includes(compNameLower) || compNameLower.includes(c));
+  });
+
+  const accountActivities = activities.filter(act => {
+    const c = (act.company || '').toLowerCase().trim();
+    return c && compNameLower && (c === compNameLower || c.includes(compNameLower) || compNameLower.includes(c));
+  });
+
+  const accountContacts = contacts.filter(c => {
+    const comp = (c.company || c.companyName || '').toLowerCase().trim();
+    return comp && compNameLower && (comp === compNameLower || comp.includes(compNameLower) || comp.includes(compNameLower));
+  });
+
+  const accountOpps = opportunities.filter(o => {
+    const c = (o.accountName || o.company || o.companyName || '').toLowerCase().trim();
+    return c && compNameLower && (c === compNameLower || c.includes(compNameLower) || compNameLower.includes(c));
+  });
+
+  const accountProposals = proposals.filter(p => {
+    const c = (p.company || p.companyName || '').toLowerCase().trim();
+    return c && compNameLower && (c === compNameLower || c.includes(compNameLower) || compNameLower.includes(c));
+  });
 
   return (
     <div className="account-detail-page">
-      {/* 1. Breadcrumbs Navigation Header */}
+      {/* 1. Breadcrumbs Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
-          <span
-            onClick={onNavigateHome}
-            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-            title="Go to Dashboard"
-          >
-            Dashboard
-          </span>
-          <ChevronRight size={14} />
-          <span
-            onClick={onBack}
-            style={{ cursor: 'pointer', color: '#063669' }}
-            title="Return to Accounts Directory & Client Portfolios"
-          >
-            Accounts Directory & Client Portfolios
-          </span>
-          <ChevronRight size={14} />
-          <span style={{ color: '#063669', fontWeight: 700 }}>
-            {account.companyName}
-          </span>
+          {navigationSource === 'contacts' ? (
+            <>
+              <span
+                onClick={onNavigateToContacts || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Contacts Directory"
+              >
+                Contacts Directory
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : navigationSource === 'dashboard' ? (
+            <>
+              <span
+                onClick={onNavigateHome}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                title="Go to Dashboard"
+              >
+                Dashboard
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : navigationSource === 'activities' ? (
+            <>
+              <span
+                onClick={onNavigateToActivities || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Activities & Engagement Timeline"
+              >
+                Activities & Engagement Timeline
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : navigationSource === 'proposals' ? (
+            <>
+              <span
+                onClick={onNavigateToProposals || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Proposals & Commercial Worth"
+              >
+                Proposals & Commercial Worth
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : (
+            <>
+              <span
+                onClick={onNavigateHome}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                title="Go to Dashboard"
+              >
+                Dashboard
+              </span>
+              <ChevronRight size={14} />
+              <span
+                onClick={onBack}
+                style={{ cursor: 'pointer', color: '#063669' }}
+                title="Return to Accounts Directory & Client Portfolios"
+              >
+                Accounts Directory & Client Portfolios
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          )}
         </nav>
       </div>
 

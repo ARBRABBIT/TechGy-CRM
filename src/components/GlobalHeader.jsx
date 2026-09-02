@@ -10,7 +10,8 @@ import {
   FileText,
   Contact,
   Calendar,
-  X
+  X,
+  LogOut
 } from 'lucide-react';
 import { INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
 import NotificationsPopover from './NotificationsPopover';
@@ -38,7 +39,8 @@ export default function GlobalHeader({
   onMarkAllAsRead,
   onClearAll,
   onSelectNotification,
-  onOpenProfile
+  onOpenProfile,
+  onLogout
 }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);

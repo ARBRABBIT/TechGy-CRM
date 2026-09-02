@@ -23,7 +23,11 @@ export default function LeadDetailView({
   onBack,
   onNavigateHome,
   onQuickAction,
-  onNavigateToAccount
+  onNavigateToAccount,
+  navigationSource = 'leads',
+  onNavigateToActivities,
+  onNavigateToProposals,
+  onNavigateToContacts
 }) {
   const [newNote, setNewNote] = useState('');
   const [notesList, setNotesList] = useState(
@@ -51,25 +55,85 @@ export default function LeadDetailView({
       {/* 1. Breadcrumbs Navigation Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
-          <span
-            onClick={onNavigateHome}
-            style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-            title="Go to Dashboard"
-          >
-            Dashboard
-          </span>
-          <ChevronRight size={14} />
-          <span
-            onClick={onBack}
-            style={{ cursor: 'pointer', color: '#063669' }}
-            title="Return to Leads Directory & Sales Pipeline"
-          >
-            Leads Directory & Sales Pipeline
-          </span>
-          <ChevronRight size={14} />
-          <span style={{ color: '#063669', fontWeight: 700 }}>
-            {lead.leadName} ({lead.company})
-          </span>
+          {navigationSource === 'contacts' ? (
+            <>
+              <span
+                onClick={onNavigateToContacts || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Contacts Directory"
+              >
+                Contacts Directory
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {lead.leadName} ({lead.company})
+              </span>
+            </>
+          ) : navigationSource === 'dashboard' ? (
+            <>
+              <span
+                onClick={onNavigateHome}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                title="Go to Dashboard"
+              >
+                Dashboard
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {lead.leadName} ({lead.company})
+              </span>
+            </>
+          ) : navigationSource === 'activities' ? (
+            <>
+              <span
+                onClick={onNavigateToActivities || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Activities & Engagement Timeline"
+              >
+                Activities & Engagement Timeline
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {lead.leadName} ({lead.company})
+              </span>
+            </>
+          ) : navigationSource === 'proposals' ? (
+            <>
+              <span
+                onClick={onNavigateToProposals || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Proposals & Commercial Worth"
+              >
+                Proposals & Commercial Worth
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {lead.leadName} ({lead.company})
+              </span>
+            </>
+          ) : (
+            <>
+              <span
+                onClick={onNavigateHome}
+                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                title="Go to Dashboard"
+              >
+                Dashboard
+              </span>
+              <ChevronRight size={14} />
+              <span
+                onClick={onBack}
+                style={{ cursor: 'pointer', color: '#063669' }}
+                title="Return to Leads Directory & Sales Pipeline"
+              >
+                Leads Directory & Sales Pipeline
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {lead.leadName} ({lead.company})
+              </span>
+            </>
+          )}
         </nav>
       </div>
 

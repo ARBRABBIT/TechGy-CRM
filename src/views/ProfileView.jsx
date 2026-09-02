@@ -18,7 +18,8 @@ import {
   Users,
   Target,
   FileText,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 
 export default function ProfileView({
@@ -28,7 +29,8 @@ export default function ProfileView({
   accounts = [],
   opportunities = [],
   onSelectLead,
-  onSelectAccount
+  onSelectAccount,
+  onLogout
 }) {
   const [activeTab, setActiveTab] = useState('details');
 
@@ -82,6 +84,31 @@ export default function ProfileView({
             User Profile & Settings
           </span>
         </nav>
+
+        {onLogout && (
+          <button
+            type="button"
+            onClick={onLogout}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              background: '#FEF2F2',
+              color: '#EF4444',
+              border: '1px solid #FCA5A5',
+              padding: '0.45rem 0.95rem',
+              borderRadius: '9999px',
+              fontWeight: 600,
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+            title="Sign out of TechGy Link"
+          >
+            <LogOut size={16} />
+            <span>Log Out</span>
+          </button>
+        )}
       </div>
 
       {/* Hero Profile Banner Header */}
@@ -463,6 +490,35 @@ export default function ProfileView({
               </div>
               <span className="status-chip won" style={{ fontSize: '0.7rem' }}>Enabled</span>
             </div>
+
+            {onLogout && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', backgroundColor: '#FEF2F2', border: '1px solid #FCA5A5', borderRadius: '10px', marginTop: '0.5rem' }}>
+                <div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#991B1B' }}>Sign Out & End Session</div>
+                  <div style={{ fontSize: '0.775rem', color: '#7F1D1D' }}>Disconnect from TechGy Link CRM and return to login screen.</div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    background: '#EF4444',
+                    color: '#FFFFFF',
+                    border: 'none',
+                    padding: '0.5rem 1.1rem',
+                    borderRadius: '8px',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <LogOut size={16} />
+                  <span>Log Out Now</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

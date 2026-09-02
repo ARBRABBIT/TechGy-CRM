@@ -2,7 +2,7 @@ import React from 'react';
 import { FileText, CheckCircle2 } from 'lucide-react';
 import { isDateInFilter } from '../utils/dateUtils';
 
-export default function ProposalsView({ proposals = [], searchQuery = '', selectedDateFilter = 'This Month' }) {
+export default function ProposalsView({ proposals = [], searchQuery = '', selectedDateFilter = 'This Month', onSelectAccount }) {
   const q = searchQuery.toLowerCase().trim();
   const filteredProposals = proposals.filter(p => {
     const matchesSearch = !q ||
@@ -16,6 +16,12 @@ export default function ProposalsView({ proposals = [], searchQuery = '', select
 
     return matchesSearch && matchesDate;
   });
+
+  const handleAccountClick = (companyName) => {
+    if (onSelectAccount) {
+      onSelectAccount(companyName);
+    }
+  };
 
   return (
     <div className="proposals-view">
@@ -51,8 +57,28 @@ export default function ProposalsView({ proposals = [], searchQuery = '', select
             <tbody>
               {filteredProposals.map((prop) => (
                 <tr key={prop.id}>
-                  <td style={{ fontWeight: 700, color: '#063669' }}>{prop.proposalId}</td>
-                  <td style={{ fontWeight: 600 }}>{prop.company}</td>
+                  <td>
+                    <button
+                      type="button"
+                      className="table-link-btn"
+                      onClick={() => handleAccountClick(prop.company)}
+                      title={`View ${prop.company} account details`}
+                      style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', fontWeight: 700, color: '#063669', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                      {prop.proposalId}
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="table-link-btn"
+                      onClick={() => handleAccountClick(prop.company)}
+                      title={`View ${prop.company} account details`}
+                      style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', fontWeight: 600, color: '#084482', cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                      {prop.company}
+                    </button>
+                  </td>
                   <td>{prop.opportunity}</td>
                   <td style={{ fontWeight: 700 }}>{prop.proposalValue}</td>
                   <td style={{ color: '#557396' }}>{prop.estimatedAccountWorth}</td>

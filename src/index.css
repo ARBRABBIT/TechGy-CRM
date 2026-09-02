@@ -568,7 +568,8 @@ body {
   white-space: nowrap;
 }
 
-.apple-date-btn:hover, .apple-date-btn.active {
+.apple-date-btn:hover,
+.apple-date-btn.active {
   border-color: #063669;
   background: #FFFFFF;
   box-shadow: 0 4px 14px rgba(6, 54, 105, 0.14);
@@ -607,8 +608,15 @@ body {
 }
 
 @keyframes applePopIn {
-  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 /* Apple Segmented Control Tab Switcher */
@@ -1921,6 +1929,25 @@ button,
   animation: cardPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.toast-dismiss-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  margin-left: 8px;
+  transition: all 0.15s ease;
+}
+
+.toast-dismiss-btn:hover {
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.15);
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
   .sidebar {
@@ -1961,5 +1988,367 @@ button,
 
   .header-right .search-box {
     display: none;
+  }
+}
+
+/* TechGy Link Login Page Specs from Figma */
+.techgy-login-wrapper {
+  position: relative;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.login-full-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Bigger Logo SVG graphic positioned at the right & bottom edge of screen */
+.login-bigger-logo-svg {
+  position: absolute;
+  width: 680px;
+  height: 715px;
+  right: -50px;
+  bottom: -180px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.login-bigger-logo-svg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.login-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 60px 0 0 50px;
+}
+
+.techgy-logo-img {
+  height: 57px;
+  width: auto;
+  object-fit: contain;
+}
+
+.login-content-container {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding-left: 215px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.login-card-box {
+  width: 454px;
+}
+
+.login-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 40px;
+  color: #1A1C1D;
+  letter-spacing: -0.9px;
+  margin: 0 0 12px 0;
+}
+
+.login-subtitle {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  color: #3D4949;
+  margin-bottom: 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  width: 454px;
+}
+
+.form-label {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  color: #3D4949;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 454px;
+  height: 56px;
+}
+
+.input-icon-left {
+  position: absolute;
+  left: 24px;
+  color: #6D7A7A;
+  pointer-events: none;
+}
+
+.login-input {
+  width: 454px;
+  height: 56px;
+  background: #F0F1F3;
+  border-radius: 32px;
+  border: none;
+  padding: 18px 24px 18px 52px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #1A1C1D;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.login-input::placeholder {
+  color: rgba(109, 122, 122, 0.4);
+  font-weight: 400;
+}
+
+.login-input:focus {
+  background: #FFFFFF;
+  box-shadow: 0 0 0 2px #063669;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 20px;
+  background: transparent;
+  border: none;
+  color: #6D7A7A;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.forgot-password-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32px;
+  margin-top: 4px;
+  width: 454px;
+}
+
+.forgot-link-btn {
+  background: transparent;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #3D4949;
+  cursor: pointer;
+}
+
+.forgot-link-btn:hover {
+  color: #063669;
+}
+
+.login-submit-btn {
+  width: 454px;
+  height: 52px;
+  background: #063669;
+  border-radius: 48px;
+  border: none;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 16px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(6, 54, 105, 0.2);
+  transition: all 0.2s ease;
+}
+
+.login-submit-btn:hover {
+  background: #084482;
+  transform: translateY(-1px);
+}
+
+.security-notice-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: rgba(61, 73, 73, 0.8);
+  width: 454px;
+  text-align: center;
+}
+
+.security-notice-footer .shield-icon {
+  color: #006D3A;
+  flex-shrink: 0;
+}
+
+.quick-demo-section {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #F1F5F9;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 454px;
+}
+
+.quick-demo-title {
+  font-size: 0.725rem;
+  font-weight: 700;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quick-chips-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.quick-chip {
+  padding: 0.35rem 0.75rem;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quick-chip:hover {
+  background: #063669;
+  border-color: #063669;
+  color: #FFFFFF;
+}
+
+/* Modal Styling */
+.forgot-password-modal {
+  background: #FFFFFF;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(6, 54, 105, 0.2);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.modal-icon-header {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #E0ECF8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+}
+
+.forgot-password-modal h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #063669;
+  margin: 0 0 0.5rem 0;
+}
+
+.modal-sub {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.modal-cancel-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: 9999px;
+  border: 1px solid #CBD5E1;
+  background: transparent;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.modal-cancel-btn:hover {
+  background: #F1F5F9;
+}
+
+.reset-success-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reset-success-box h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.reset-success-box p {
+  font-size: 0.85rem;
+  color: #64748B;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .login-header {
+    padding: 1.5rem 2rem;
+  }
+
+  .login-content-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .login-vector-graphic {
+    opacity: 0.3;
+    width: 80vw;
   }
 }

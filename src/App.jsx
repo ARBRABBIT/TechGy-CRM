@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import GlobalHeader from './components/GlobalHeader';
 import CommonActionsModal from './components/CommonActionsModal';
@@ -11,6 +11,7 @@ import OpportunitiesView from './views/OpportunitiesView';
 import ActivitiesView from './views/ActivitiesView';
 import ProposalsView from './views/ProposalsView';
 import ContactsView from './views/ContactsView';
+import LoginView from './views/LoginView';
 
 // Dedicated Full-Page Detail Views with Interactive Breadcrumb Navigation
 import LeadDetailView from './views/LeadDetailView';
@@ -27,9 +28,19 @@ import {
   INITIAL_CONTACTS,
   INITIAL_NOTIFICATIONS
 } from './data/mockData';
-import { Bell } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 
 export default function App() {
+  // Authentication State (Default to logged in on refresh; persist session)
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const saved = localStorage.getItem('techgy_authenticated');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('techgy_user');
+    return saved ? JSON.parse(saved) : { role: 'Sales Admin', email: 'admin@techgy.com', name: 'System Administrator' };
+  });
+
   // Navigation & Collapsible Sidebar State
   const [activeModule, setActiveModule] = useState('dashboard');
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -50,11 +61,23 @@ export default function App() {
   const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const [toastMessage, setToastMessage] = useState(null);
 
+  // Auto-dismiss toast pop-up notification after 5 seconds
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
+
   // Dedicated Full Page Selection States (Replaces side drawers)
   const [selectedLead, setSelectedLead] = useState(null);
   const [selectedAccount, setSelectedAccount] = useState(null);
   const [isProfileActive, setIsProfileActive] = useState(false);
   const [fromDashboard, setFromDashboard] = useState(false);
+  const [leadNavSource, setLeadNavSource] = useState('leads');
+  const [accountInitialTab, setAccountInitialTab] = useState('Leads');
 
   // Create Modal State
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -119,6 +142,16 @@ export default function App() {
   };
 
   // Cross-Navigation Handlers (Dashboard Interactions)
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    setCurrentUser(null);
+    localStorage.setItem('techgy_authenticated', JSON.stringify(false));
+    localStorage.removeItem('techgy_user');
+    setSelectedLead(null);
+    setSelectedAccount(null);
+    setIsProfileActive(false);
+    setActiveModule('dashboard');
+  };
   const handleNavigateToLeads = (source = '', overdue = false) => {
     setSelectedLead(null);
     setSelectedAccount(null);
@@ -301,12 +334,27 @@ export default function App() {
 
   // Generate unique view key to trigger smooth CSS page transition keyframes on every page change
   const currentViewKey = isProfileActive
-    ? 'user-profile'
+    ? 'profile'
     : selectedLead
-      ? `lead-detail-${selectedLead.id}`
-      : selectedAccount
-        ? `account-detail-${selectedAccount.id}`
-        : `module-${activeModule}`;
+    ? `lead-${selectedLead.id}`
+    : selectedAccount
+    ? `account-${selectedAccount.id}`
+    : activeModule;
+
+  // Unauthenticated view screen
+  if (!isAuthenticated) {
+    return (
+      <LoginView
+        onLoginSuccess={(user) => {
+          setIsAuthenticated(true);
+          setCurrentUser(user);
+          localStorage.setItem('techgy_authenticated', JSON.stringify(true));
+          localStorage.setItem('techgy_user', JSON.stringify(user));
+          setToastMessage(`Welcome, ${user.name}! Connected to TechGy Link.`);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="app-container">
@@ -350,6 +398,11 @@ export default function App() {
           onClearAll={handleClearAllNotifications}
           onSelectNotification={handleSelectNotification}
           onOpenProfile={handleOpenProfile}
+          onLogout={() => {
+            setIsAuthenticated(false);
+            setCurrentUser(null);
+            setToastMessage('Logged out of TechGy Link');
+          }}
         />
 
         {/* 3. Main Page Content with Keyed Dynamic Transition */}
@@ -374,6 +427,7 @@ export default function App() {
                 setSelectedAccount(acc);
                 setActiveModule('accounts');
               }}
+              onLogout={handleLogout}
             />
           ) : selectedLead ? (
             <LeadDetailView
@@ -386,11 +440,28 @@ export default function App() {
               }}
               onQuickAction={handleQuickAction}
               onNavigateToAccount={handleNavigateToCompanyAccount}
+              navigationSource={leadNavSource}
+              onNavigateToActivities={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('activities');
+              }}
+              onNavigateToProposals={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('proposals');
+              }}
+              onNavigateToContacts={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('contacts');
+              }}
             />
           ) : selectedAccount ? (
             /* Full Page Account Detail View with Breadcrumb Navigation */
             <AccountDetailView
               account={selectedAccount}
+              initialTab={accountInitialTab}
               onBack={() => setSelectedAccount(null)}
               onNavigateHome={() => {
                 setSelectedLead(null);
@@ -403,6 +474,7 @@ export default function App() {
               opportunities={opportunities}
               proposals={proposals}
               onSelectLead={(l) => {
+                setLeadNavSource('leads');
                 setSelectedAccount(null);
                 setSelectedLead(l);
                 setActiveModule('leads');
@@ -410,6 +482,22 @@ export default function App() {
               onOpenCreateModal={(type) => {
                 setModalInitialType(type);
                 setIsCreateModalOpen(true);
+              }}
+              navigationSource={leadNavSource}
+              onNavigateToActivities={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('activities');
+              }}
+              onNavigateToProposals={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('proposals');
+              }}
+              onNavigateToContacts={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('contacts');
               }}
             />
           ) : (
@@ -424,6 +512,7 @@ export default function App() {
                   onNavigateToAccounts={handleNavigateToAccounts}
                   onNavigateToActivities={handleNavigateToActivities}
                   onSelectLead={(lead) => {
+                    setLeadNavSource('dashboard');
                     setSelectedAccount(null);
                     setSelectedLead(lead);
                   }}
@@ -437,6 +526,7 @@ export default function App() {
                 <LeadsView
                   leads={leads}
                   onSelectLead={(lead) => {
+                    setLeadNavSource('leads');
                     setSelectedAccount(null);
                     setSelectedLead(lead);
                   }}
@@ -465,7 +555,8 @@ export default function App() {
                 <AccountsView
                   accounts={accounts}
                   onSelectAccount={(acc) => {
-                    setSelectedLead(null);
+                    setLeadNavSource('accounts');
+                    setAccountInitialTab('Leads');
                     setSelectedAccount(acc);
                   }}
                   searchQuery={searchQuery}
@@ -518,6 +609,29 @@ export default function App() {
                     setActiveModule('dashboard');
                   }}
                   initialTab={activitiesInitialTab}
+                  onSelectLead={(leadName) => {
+                    const matched = leads.find(l => l.leadName.toLowerCase() === leadName.toLowerCase() || l.leadName.toLowerCase().includes(leadName.toLowerCase()) || leadName.toLowerCase().includes(l.leadName.toLowerCase()));
+                    if (matched) {
+                      setLeadNavSource('activities');
+                      setSelectedAccount(null);
+                      setSelectedLead(matched);
+                    } else {
+                      const matchedAcc = accounts.find(a => a.companyName.toLowerCase() === leadName.toLowerCase() || a.companyName.toLowerCase().includes(leadName.toLowerCase()) || leadName.toLowerCase().includes(a.companyName.toLowerCase()));
+                      if (matchedAcc) {
+                        setLeadNavSource('activities');
+                        setSelectedLead(null);
+                        setSelectedAccount(matchedAcc);
+                      }
+                    }
+                  }}
+                  onSelectAccount={(companyName) => {
+                    const matchedAcc = accounts.find(a => a.companyName.toLowerCase() === companyName.toLowerCase() || a.companyName.toLowerCase().includes(companyName.toLowerCase()) || companyName.toLowerCase().includes(a.companyName.toLowerCase()));
+                    if (matchedAcc) {
+                      setLeadNavSource('activities');
+                      setSelectedLead(null);
+                      setSelectedAccount(matchedAcc);
+                    }
+                  }}
                 />
               )}
 
@@ -526,6 +640,36 @@ export default function App() {
                   proposals={proposals}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
+                  onSelectAccount={(companyName) => {
+                    let fullAcc = accounts.find(a =>
+                      a.companyName === companyName ||
+                      a.companyName.toLowerCase().includes((companyName || '').toLowerCase()) ||
+                      (companyName || '').toLowerCase().includes(a.companyName.toLowerCase())
+                    );
+
+                    if (!fullAcc && companyName) {
+                      fullAcc = {
+                        id: `ACC-GEN-${Date.now()}`,
+                        companyName: companyName,
+                        industry: 'Enterprise Technology',
+                        companySize: '500-1000 employees',
+                        website: `www.${companyName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+                        location: 'Mumbai HQ, India',
+                        accountOwner: 'Rajesh Sharma',
+                        estimatedAccountValue: '₹1,80,00,000',
+                        leadsCount: 1,
+                        contactsCount: 1,
+                        oppsCount: 1,
+                        proposalsCount: 1
+                      };
+                    }
+
+                    if (fullAcc) {
+                      setLeadNavSource('proposals');
+                      setAccountInitialTab('Proposals');
+                      setSelectedAccount(fullAcc);
+                    }
+                  }}
                 />
               )}
 
@@ -533,8 +677,35 @@ export default function App() {
                 <ContactsView
                   contacts={contacts}
                   onSelectAccount={(acc) => {
-                    const fullAcc = accounts.find(a => a.companyName === acc.company);
-                    if (fullAcc) setSelectedAccount(fullAcc);
+                    const companyName = typeof acc === 'string' ? acc : (acc.company || acc.companyName);
+                    let fullAcc = accounts.find(a =>
+                      a.companyName === companyName ||
+                      a.companyName.toLowerCase().includes((companyName || '').toLowerCase()) ||
+                      (companyName || '').toLowerCase().includes(a.companyName.toLowerCase())
+                    );
+
+                    if (!fullAcc && companyName) {
+                      fullAcc = {
+                        id: `ACC-GEN-${Date.now()}`,
+                        companyName: companyName,
+                        industry: 'Enterprise Software',
+                        companySize: '500-1000 employees',
+                        website: `www.${companyName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com`,
+                        location: 'Mumbai HQ, India',
+                        accountOwner: 'Rajesh Sharma',
+                        estimatedAccountValue: '₹1,80,00,000',
+                        leadsCount: 2,
+                        contactsCount: 4,
+                        oppsCount: 1,
+                        proposalsCount: 1
+                      };
+                    }
+
+                    if (fullAcc) {
+                      setLeadNavSource('contacts');
+                      setAccountInitialTab('Leads');
+                      setSelectedAccount(fullAcc);
+                    }
                   }}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
@@ -559,6 +730,14 @@ export default function App() {
           <div className="toast-banner">
             <Bell size={18} />
             <span>{toastMessage}</span>
+            <button
+              type="button"
+              className="toast-dismiss-btn"
+              onClick={() => setToastMessage(null)}
+              title="Dismiss"
+            >
+              <X size={14} />
+            </button>
           </div>
         </div>
       )}
