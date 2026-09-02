@@ -25,6 +25,7 @@ import {
   Cell
 } from 'recharts';
 import { REVENUE_DATA, INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
+import { isDateInFilter, getFilterLabel } from '../utils/dateUtils';
 
 export default function DashboardView({
   leads = [],
@@ -67,12 +68,7 @@ export default function DashboardView({
 
   // Filter leads/activities dynamically based on global owner filter & date filter
   const isDateMatch = (dateStr) => {
-    if (!dateStr || selectedDateFilter === 'All Time') return true;
-    const d = dateStr.toLowerCase();
-    if (selectedDateFilter === 'This Month') return d.includes('2026-08') || d.includes('2026-09') || d.includes('aug') || d.includes('sep');
-    if (selectedDateFilter === 'This Quarter') return d.includes('2026-07') || d.includes('2026-08') || d.includes('2026-09') || d.includes('q3');
-    if (selectedDateFilter === 'FY 2025-26') return d.includes('2025') || d.includes('2026');
-    return true;
+    return isDateInFilter(dateStr, selectedDateFilter);
   };
 
   const filteredLeads = leads.filter(l => {
@@ -118,12 +114,7 @@ export default function DashboardView({
     if (marketingOwnerFilter !== 'All Owners' && lead.leadOwner !== marketingOwnerFilter) {
       return false;
     }
-    if (marketingDateFilter !== 'All Time') {
-      const d = (lead.createdDate || '').toLowerCase();
-      if (marketingDateFilter === 'This Month' && !(d.includes('2026-08') || d.includes('2026-09'))) return false;
-      if (marketingDateFilter === 'This Quarter' && !(d.includes('2026-07') || d.includes('2026-08') || d.includes('2026-09'))) return false;
-    }
-    return true;
+    return isDateInFilter(lead.createdDate, marketingDateFilter);
   });
 
   const sourceCounts = {
@@ -173,7 +164,7 @@ export default function DashboardView({
             {selectedOwnerFilter}
           </span>
           <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600 }}>
-            {selectedDateFilter}
+            {getFilterLabel(selectedDateFilter)}
           </span>
         </div>
       </div>
@@ -240,7 +231,7 @@ export default function DashboardView({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.05rem' }}>
               <h3 className="chart-title" style={{ margin: 0, lineHeight: 1.2 }}>Revenue Trend ({revenueToggle})</h3>
               <div style={{ fontSize: '0.775rem', color: '#557396', margin: 0, lineHeight: 1.2 }}>
-                Revenue movement across selected period: {selectedDateFilter}
+                Revenue movement across selected period: {getFilterLabel(selectedDateFilter)}
               </div>
             </div>
             {/* Monthly / Quarterly / FY toggle switch */}

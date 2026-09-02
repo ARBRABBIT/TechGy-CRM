@@ -13,6 +13,7 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { LEAD_SOURCES, INITIAL_OWNERS } from '../data/mockData';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function LeadsView({
   leads = [],
@@ -23,6 +24,7 @@ export default function LeadsView({
   initialFilterSource = '',
   initialOverdueOnly = false,
   searchQuery = '',
+  selectedDateFilter = 'This Month',
   fromDashboard = false,
   onBackToDashboard,
   onClearFilters
@@ -78,6 +80,13 @@ export default function LeadsView({
     // 5. Overdue Only
     if (overdueOnly && !lead.isOverdue) {
       return false;
+    }
+
+    // 6. Global Date Filter
+    if (selectedDateFilter && selectedDateFilter !== 'All Time') {
+      const matchCreated = isDateInFilter(lead.createdDate, selectedDateFilter);
+      const matchFollowup = isDateInFilter(lead.nextFollowup, selectedDateFilter);
+      if (!matchCreated && !matchFollowup) return false;
     }
 
     return true;

@@ -15,6 +15,7 @@ import {
   GripVertical,
   MoveRight
 } from 'lucide-react';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function OpportunitiesView({ 
   opportunities = [], 
@@ -55,10 +56,11 @@ export default function OpportunitiesView({
       const matchesStage = selectedStage === 'All' || opp.currentStage === selectedStage;
       const matchesOwner = selectedOwner === 'All' || opp.owner === selectedOwner;
       const matchesGlobalOwner = selectedOwnerFilter === 'All Owners' || opp.owner === selectedOwnerFilter;
+      const matchesDate = isDateInFilter(opp.expectedClosureDate || opp.createdDate, selectedDateFilter);
 
-      return matchesSearch && matchesStage && matchesOwner && matchesGlobalOwner;
+      return matchesSearch && matchesStage && matchesOwner && matchesGlobalOwner && matchesDate;
     });
-  }, [opportunities, activeSearch, selectedStage, selectedOwner, selectedOwnerFilter]);
+  }, [opportunities, activeSearch, selectedStage, selectedOwner, selectedOwnerFilter, selectedDateFilter]);
 
   // Reset to page 1 on search / filter change
   useMemo(() => {

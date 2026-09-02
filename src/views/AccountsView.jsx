@@ -1,5 +1,6 @@
 import React from 'react';
 import { Building2, Globe, MapPin, Users, FileText, ChevronRight } from 'lucide-react';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function AccountsView({
   accounts = [],
@@ -10,13 +11,17 @@ export default function AccountsView({
   onBackToDashboard
 }) {
   const q = searchQuery.toLowerCase().trim();
-  const filteredAccounts = accounts.filter(acc =>
-    !q ||
-    acc.companyName.toLowerCase().includes(q) ||
-    acc.industry.toLowerCase().includes(q) ||
-    acc.location.toLowerCase().includes(q) ||
-    acc.accountOwner.toLowerCase().includes(q)
-  );
+  const filteredAccounts = accounts.filter(acc => {
+    const matchesSearch = !q ||
+      acc.companyName.toLowerCase().includes(q) ||
+      acc.industry.toLowerCase().includes(q) ||
+      acc.location.toLowerCase().includes(q) ||
+      acc.accountOwner.toLowerCase().includes(q);
+
+    const matchesDate = isDateInFilter(acc.createdDate || acc.lastContacted, selectedDateFilter);
+
+    return matchesSearch && matchesDate;
+  });
 
   return (
     <div className="accounts-view">

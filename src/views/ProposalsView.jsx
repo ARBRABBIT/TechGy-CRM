@@ -1,16 +1,21 @@
 import React from 'react';
 import { FileText, CheckCircle2 } from 'lucide-react';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function ProposalsView({ proposals = [], searchQuery = '', selectedDateFilter = 'This Month' }) {
   const q = searchQuery.toLowerCase().trim();
-  const filteredProposals = proposals.filter(p =>
-    !q ||
-    p.proposalId.toLowerCase().includes(q) ||
-    p.company.toLowerCase().includes(q) ||
-    p.opportunity.toLowerCase().includes(q) ||
-    p.notes.toLowerCase().includes(q) ||
-    p.owner.toLowerCase().includes(q)
-  );
+  const filteredProposals = proposals.filter(p => {
+    const matchesSearch = !q ||
+      p.proposalId.toLowerCase().includes(q) ||
+      p.company.toLowerCase().includes(q) ||
+      p.opportunity.toLowerCase().includes(q) ||
+      p.notes.toLowerCase().includes(q) ||
+      p.owner.toLowerCase().includes(q);
+
+    const matchesDate = isDateInFilter(p.validityDate || p.createdDate, selectedDateFilter);
+
+    return matchesSearch && matchesDate;
+  });
 
   return (
     <div className="proposals-view">

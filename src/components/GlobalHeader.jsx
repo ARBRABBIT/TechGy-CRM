@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
 import NotificationsPopover from './NotificationsPopover';
+import CustomDateSelector from './CustomDateSelector';
 
 export default function GlobalHeader({
   activeModule,
@@ -282,19 +283,11 @@ export default function GlobalHeader({
           )}
         </div>
 
-        {/* Date Filter */}
-        <select
-          className="select-filter"
-          value={selectedDateFilter}
-          onChange={(e) => setSelectedDateFilter(e.target.value)}
-          title="Date Filter"
-        >
-          {INITIAL_DATE_FILTERS.map((dateOpt) => (
-            <option key={dateOpt} value={dateOpt}>
-              {dateOpt}
-            </option>
-          ))}
-        </select>
+        {/* Custom Date Filter */}
+        <CustomDateSelector
+          selectedDateFilter={selectedDateFilter}
+          setSelectedDateFilter={setSelectedDateFilter}
+        />
 
         {/* Owner Filter */}
         <select

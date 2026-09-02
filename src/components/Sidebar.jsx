@@ -14,13 +14,13 @@ import {
 } from 'lucide-react';
 
 const MODULES = [
-  { id: 'dashboard', index: '01', title: 'Dashboard', icon: LayoutDashboard, badge: null },
-  { id: 'leads', index: '02', title: 'Leads', icon: Users, badge: { text: '7 Alert', type: 'alert' } },
-  { id: 'accounts', index: '03', title: 'Accounts', icon: Building2, badge: null },
-  { id: 'opportunities', index: '04', title: 'Opportunities', icon: TrendingUp, badge: null },
-  { id: 'activities', index: '05', title: 'Activities', icon: Calendar, badge: { text: '14 Tasks', type: 'tasks' } },
-  { id: 'proposals', index: '06', title: 'Proposals', icon: FileText, badge: null },
-  { id: 'contacts', index: '07', title: 'Contacts', icon: Contact, badge: null }
+  { id: 'dashboard', title: 'Dashboard', icon: LayoutDashboard, badge: null },
+  { id: 'leads', title: 'Leads', icon: Users, badge: { text: '7 Alert', type: 'alert' } },
+  { id: 'accounts', title: 'Accounts', icon: Building2, badge: null },
+  { id: 'opportunities', title: 'Opportunities', icon: TrendingUp, badge: null },
+  { id: 'activities', title: 'Activities', icon: Calendar, badge: { text: '14 Tasks', type: 'tasks' } },
+  { id: 'proposals', title: 'Proposals', icon: FileText, badge: null },
+  { id: 'contacts', title: 'Contacts', icon: Contact, badge: null }
 ];
 
 export default function Sidebar({
@@ -90,10 +90,9 @@ export default function Sidebar({
                 setActiveModule(item.id);
                 setMobileOpen(false);
               }}
-              title={isCollapsed ? `${item.index} ${item.title}` : undefined}
+              title={isCollapsed ? item.title : undefined}
             >
               <div className="menu-left">
-                {!isCollapsed && <span className="menu-index">{item.index}</span>}
                 <Icon size={18} className="menu-icon" />
                 {!isCollapsed && <span>{item.title}</span>}
               </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MessageSquare, Clock, Calendar, ChevronRight } from 'lucide-react';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function ActivitiesView({
   activities = [],
@@ -28,6 +29,10 @@ export default function ActivitiesView({
       const matchOwner = act.owner && act.owner.toLowerCase().includes(q);
       const matchType = act.type && act.type.toLowerCase().includes(q);
       if (!matchCompany && !matchLead && !matchNotes && !matchOwner && !matchType) return false;
+    }
+    if (selectedDateFilter && selectedDateFilter !== 'All Time') {
+      const matchesDate = isDateInFilter(act.date || act.dueTime, selectedDateFilter);
+      if (!matchesDate) return false;
     }
     return true;
   });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Contact, Search, Building2, Phone, Mail } from 'lucide-react';
+import { isDateInFilter } from '../utils/dateUtils';
 
 export default function ContactsView({ contacts = [], onSelectAccount, searchQuery = '', selectedDateFilter = 'This Month' }) {
   const [activePreset, setActivePreset] = useState('All Contacts');
@@ -16,6 +17,10 @@ export default function ContactsView({ contacts = [], onSelectAccount, searchQue
       const matchPhone = c.phone.toLowerCase().includes(q);
       const matchOwner = c.owner.toLowerCase().includes(q);
       if (!matchName && !matchCompany && !matchEmail && !matchPhone && !matchOwner) return false;
+    }
+    if (selectedDateFilter && selectedDateFilter !== 'All Time') {
+      const matchesDate = isDateInFilter(c.createdDate || c.lastContacted, selectedDateFilter);
+      if (!matchesDate) return false;
     }
     return true;
   });
