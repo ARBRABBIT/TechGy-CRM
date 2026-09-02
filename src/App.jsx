@@ -482,6 +482,13 @@ export default function App() {
               {activeModule === 'opportunities' && (
                 <OpportunitiesView
                   opportunities={opportunities}
+                  onUpdateOpportunityStage={(oppId, newStage) => {
+                    setOpportunities(prev => prev.map(o => o.id === oppId ? { ...o, currentStage: newStage } : o));
+                    const targetOpp = opportunities.find(o => o.id === oppId);
+                    if (targetOpp) {
+                      pushNotification('Stage Updated', `Moved "${targetOpp.opportunityName}" to ${newStage}`, 'Opportunity', 'opportunities');
+                    }
+                  }}
                   onSelectAccount={(companyName) => {
                     const fullAcc = accounts.find(a => a.companyName.toLowerCase() === companyName.toLowerCase());
                     if (fullAcc) {
@@ -493,6 +500,10 @@ export default function App() {
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
                   selectedOwnerFilter={selectedOwnerFilter}
+                  onOpenCreateModal={(type = 'createLead') => {
+                    setModalInitialType(type);
+                    setIsCreateModalOpen(true);
+                  }}
                 />
               )}
 

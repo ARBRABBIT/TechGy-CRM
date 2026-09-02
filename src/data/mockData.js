@@ -282,65 +282,147 @@ export const INITIAL_LEADS = [
 
 export const INITIAL_OPPORTUNITIES = [
   {
-    id: 'OPP-301',
-    accountName: 'Tata Consultancy Tech Ltd',
-    opportunityName: 'Tata Tech CRM Enterprise License Expansion',
-    score: 85,
-    visualLevel: 'High',
-    estimatedValue: '₹1,80,00,000',
-    probability: '80%',
-    expectedClosureDate: '2026-09-30',
-    currentStage: 'Proposal',
-    owner: 'Rajesh Sharma'
-  },
-  {
-    id: 'OPP-302',
-    accountName: 'Reliance Cloud Solutions',
-    opportunityName: 'Reliance Cloud Multi-Region Rollout',
-    score: 92,
-    visualLevel: 'High',
-    estimatedValue: '₹3,20,00,000',
-    probability: '90%',
-    expectedClosureDate: '2026-09-15',
-    currentStage: 'Negotiation',
-    owner: 'Priya Patel'
-  },
-  {
-    id: 'OPP-303',
-    accountName: 'Infosys Digital Systems',
-    opportunityName: 'Infosys Digital Secure Workspace',
-    score: 65,
-    visualLevel: 'Medium',
-    estimatedValue: '₹1,40,00,000',
+    id: 'OPP-101',
+    opportunityName: 'GreenGrid – ERP Integration',
+    accountName: 'GreenGrid Energy Pvt Ltd',
+    estimatedValue: '₹45.50 Lakh',
+    currentStage: 'Proposal Sent',
     probability: '60%',
-    expectedClosureDate: '2026-10-15',
-    currentStage: 'Discussion',
-    owner: 'Amit Verma'
+    expectedClosureDate: '28 Oct 2024',
+    owner: 'Rahul Verma',
+    score: 78,
+    visualLevel: 'High'
   },
   {
-    id: 'OPP-304',
-    accountName: 'HDFC Fintech Dynamics',
-    opportunityName: 'HDFC Core Analytics Integration',
-    score: 74,
-    visualLevel: 'Medium',
-    estimatedValue: '₹95,00,000',
-    probability: '75%',
-    expectedClosureDate: '2026-09-25',
-    currentStage: 'Qualified',
-    owner: 'Ananya Rao'
+    id: 'OPP-102',
+    opportunityName: 'Apex Tech – Cloud Migration',
+    accountName: 'Apex Technologies Ltd',
+    estimatedValue: '₹1.20 Cr',
+    currentStage: 'Negotiation',
+    probability: '85%',
+    expectedClosureDate: '15 Nov 2024',
+    owner: 'Priya Sharma',
+    score: 90,
+    visualLevel: 'High'
   },
   {
-    id: 'OPP-305',
-    accountName: 'Mahindra Supply Chain Logistics',
-    opportunityName: 'Mahindra Supply Chain Portal',
-    score: 40,
-    visualLevel: 'Low',
-    estimatedValue: '₹75,00,000',
-    probability: '30%',
-    expectedClosureDate: '2026-11-30',
-    currentStage: 'New',
-    owner: 'Vikram Malhotra'
-  }
+    id: 'OPP-103',
+    opportunityName: 'Nexus – Q4 Software License',
+    accountName: 'Nexus Retails India',
+    estimatedValue: '₹8.75 Lakh',
+    currentStage: 'Discovery',
+    probability: '20%',
+    expectedClosureDate: '10 Dec 2024',
+    owner: 'Rahul Verma',
+    score: 45,
+    visualLevel: 'Low'
+  },
+  {
+    id: 'OPP-104',
+    opportunityName: 'Nexus – Q4 Software License',
+    accountName: 'Nexus Retails India',
+    estimatedValue: '₹8.75 Lakh',
+    currentStage: 'Discovery',
+    probability: '20%',
+    expectedClosureDate: '10 Dec 2024',
+    owner: 'Rahul Verma',
+    score: 45,
+    visualLevel: 'Low'
+  },
+  {
+    id: 'OPP-105',
+    opportunityName: 'Nexus – Q4 Software License',
+    accountName: 'Nexus Retails India',
+    estimatedValue: '₹8.75 Lakh',
+    currentStage: 'Discovery',
+    probability: '20%',
+    expectedClosureDate: '10 Dec 2024',
+    owner: 'Rahul Verma',
+    score: 45,
+    visualLevel: 'Low'
+  },
+  {
+    id: 'OPP-106',
+    opportunityName: 'Nexus – Q4 Software License',
+    accountName: 'Nexus Retails India',
+    estimatedValue: '₹8.75 Lakh',
+    currentStage: 'Discovery',
+    probability: '20%',
+    expectedClosureDate: '10 Dec 2024',
+    owner: 'Rahul Verma',
+    score: 45,
+    visualLevel: 'Low'
+  },
+  {
+    id: 'OPP-107',
+    opportunityName: 'Nexus – Q4 Software License',
+    accountName: 'Nexus Retails India',
+    estimatedValue: '₹8.75 Lakh',
+    currentStage: 'Discovery',
+    probability: '20%',
+    expectedClosureDate: '10 Dec 2024',
+    owner: 'Rahul Verma',
+    score: 45,
+    visualLevel: 'Low'
+  },
+  {
+    id: 'OPP-108',
+    opportunityName: 'Tata Tech CRM Enterprise License Expansion',
+    accountName: 'Tata Consultancy Tech Ltd',
+    estimatedValue: '₹1.80 Cr',
+    currentStage: 'Proposal Sent',
+    probability: '80%',
+    expectedClosureDate: '30 Sep 2024',
+    owner: 'Rajesh Sharma',
+    score: 85,
+    visualLevel: 'High'
+  },
+  {
+    id: 'OPP-109',
+    opportunityName: 'Reliance Cloud Multi-Region Rollout',
+    accountName: 'Reliance Cloud Solutions',
+    estimatedValue: '₹3.20 Cr',
+    currentStage: 'Negotiation',
+    probability: '90%',
+    expectedClosureDate: '15 Sep 2024',
+    owner: 'Priya Patel',
+    score: 92,
+    visualLevel: 'High'
+  },
+  {
+    id: 'OPP-110',
+    opportunityName: 'Infosys Digital Secure Workspace',
+    accountName: 'Infosys Digital Systems',
+    estimatedValue: '₹1.40 Cr',
+    currentStage: 'Discovery',
+    probability: '60%',
+    expectedClosureDate: '15 Oct 2024',
+    owner: 'Amit Verma',
+    score: 65,
+    visualLevel: 'Medium'
+  },
+  ...Array.from({ length: 38 }).map((_, idx) => {
+    const num = idx + 11;
+    const stages = ['Discovery', 'Proposal Sent', 'Negotiation', 'Qualified', 'New'];
+    const owners = ['Rahul Verma', 'Priya Sharma', 'Rajesh Sharma', 'Priya Patel', 'Amit Verma', 'Ananya Rao', 'Vikram Malhotra'];
+    const companies = ['Zomato Logistics', 'Swiggy Pay', 'Paytm Tech', 'Razorpay Payments', 'Zerodha Capital', 'Pine Labs', 'Meesho Commerce'];
+    const stg = stages[num % stages.length];
+    const own = owners[num % owners.length];
+    const comp = companies[num % companies.length];
+    const prob = stg === 'Negotiation' ? '85%' : stg === 'Proposal Sent' ? '65%' : stg === 'Discovery' ? '20%' : '40%';
+    return {
+      id: `OPP-${100 + num}`,
+      opportunityName: `${comp} – Enterprise Integration`,
+      accountName: comp,
+      estimatedValue: `₹${(15 + num * 2.5).toFixed(2)} Lakh`,
+      currentStage: stg,
+      probability: prob,
+      expectedClosureDate: `${(num % 28) + 1} Dec 2024`,
+      owner: own,
+      score: 50 + (num % 45),
+      visualLevel: num % 2 === 0 ? 'High' : 'Medium'
+    };
+  })
 ];
 
 export const INITIAL_ACTIVITIES = [
