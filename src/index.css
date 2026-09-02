@@ -1330,7 +1330,7 @@ button,
 }
 
 .modal-header {
-  padding: 1rem 1.75rem 1rem 1.75rem;
+  padding: 1.25rem 1.75rem 0.35rem 1.75rem;
   border-bottom: none;
   display: flex;
   align-items: center;
@@ -1338,7 +1338,7 @@ button,
 }
 
 .modal-body {
-  padding: 0.5rem 1.75rem 1.5rem 1.75rem;
+  padding: 0.25rem 1.75rem 1.5rem 1.75rem;
   display: flex;
   flex-direction: column;
   gap: 1.15rem;

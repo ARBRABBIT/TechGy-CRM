@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Users,
   Search,
@@ -18,17 +18,31 @@ export default function LeadsView({
   leads = [],
   onSelectLead,
   onOpenCreateModal,
+  sourceFilter: propSourceFilter = '',
+  overdueOnlyFilter: propOverdueOnlyFilter = false,
   initialFilterSource = '',
   initialOverdueOnly = false,
   searchQuery = '',
   fromDashboard = false,
-  onBackToDashboard
+  onBackToDashboard,
+  onClearFilters
 }) {
+  const effectiveInitialSource = propSourceFilter || initialFilterSource;
+  const effectiveInitialOverdue = propOverdueOnlyFilter || initialOverdueOnly;
+
   const [localSearch, setLocalSearch] = useState('');
-  const [sourceFilter, setSourceFilter] = useState(initialFilterSource);
+  const [sourceFilter, setSourceFilter] = useState(effectiveInitialSource);
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [ownerFilter, setOwnerFilter] = useState('All Owners');
-  const [overdueOnly, setOverdueOnly] = useState(initialOverdueOnly);
+  const [overdueOnly, setOverdueOnly] = useState(effectiveInitialOverdue);
+
+  useEffect(() => {
+    setSourceFilter(propSourceFilter || initialFilterSource);
+  }, [propSourceFilter, initialFilterSource]);
+
+  useEffect(() => {
+    setOverdueOnly(propOverdueOnlyFilter || initialOverdueOnly);
+  }, [propOverdueOnlyFilter, initialOverdueOnly]);
 
   const effectiveSearch = (searchQuery || localSearch).toLowerCase().trim();
 
@@ -181,6 +195,7 @@ export default function LeadsView({
                   setOwnerFilter('All Owners');
                   setOverdueOnly(false);
                   setLocalSearch('');
+                  if (onClearFilters) onClearFilters();
                 }}
               >
                 Reset Filters

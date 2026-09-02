@@ -360,8 +360,8 @@ export const INITIAL_ACTIVITIES = [
   {
     id: 'ACT-502',
     type: 'Follow-up',
-    date: '2026-08-30 11:00 AM',
-    dueTime: '2026-08-30 11:00',
+    date: '2026-09-02 11:00 AM',
+    dueTime: '2026-09-02 11:00',
     owner: 'Priya Patel',
     company: 'Reliance Cloud Solutions',
     lead: 'Ananya Patel',
@@ -369,7 +369,8 @@ export const INITIAL_ACTIVITIES = [
     status: 'Pending',
     reminder: '15 mins before',
     notes: 'Follow up on procurement SLA terms document sent last Friday.',
-    isOverdue: true
+    isOverdue: false,
+    dueToday: true
   },
   {
     id: 'ACT-503',

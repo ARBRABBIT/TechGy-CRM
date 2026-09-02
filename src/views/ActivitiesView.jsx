@@ -1,8 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Phone, Mail, MessageSquare, Clock, Calendar, ChevronRight } from 'lucide-react';
 
-export default function ActivitiesView({ activities = [], searchQuery = '', selectedDateFilter = 'This Month' }) {
-  const [activeTab, setActiveTab] = useState('All');
+export default function ActivitiesView({
+  activities = [],
+  searchQuery = '',
+  selectedDateFilter = 'This Month',
+  fromDashboard = false,
+  onBackToDashboard,
+  initialTab = 'All'
+}) {
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   const q = searchQuery.toLowerCase().trim();
 
@@ -32,6 +45,24 @@ export default function ActivitiesView({ activities = [], searchQuery = '', sele
 
   return (
     <div className="activities-view">
+      {/* Conditional Breadcrumbs when redirected from Dashboard */}
+      {fromDashboard && (
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
+            <span
+              onClick={onBackToDashboard}
+              style={{ cursor: 'pointer', color: '#063669' }}
+              title="Go to Dashboard"
+            >
+              Dashboard
+            </span>
+            <ChevronRight size={14} />
+            <span style={{ color: '#063669', fontWeight: 700 }}>
+              Activities & Engagement Timeline
+            </span>
+          </nav>
+        </div>
+      )}
       <div className="dashboard-banner">
         <div className="banner-text">
           <h2>Activities & Engagement Timeline</h2>

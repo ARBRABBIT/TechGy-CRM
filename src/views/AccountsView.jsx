@@ -1,7 +1,14 @@
 import React from 'react';
 import { Building2, Globe, MapPin, Users, FileText, ChevronRight } from 'lucide-react';
 
-export default function AccountsView({ accounts = [], onSelectAccount, searchQuery = '', selectedDateFilter = 'This Month' }) {
+export default function AccountsView({
+  accounts = [],
+  onSelectAccount,
+  searchQuery = '',
+  selectedDateFilter = 'This Month',
+  fromDashboard = false,
+  onBackToDashboard
+}) {
   const q = searchQuery.toLowerCase().trim();
   const filteredAccounts = accounts.filter(acc =>
     !q ||
@@ -13,6 +20,24 @@ export default function AccountsView({ accounts = [], onSelectAccount, searchQue
 
   return (
     <div className="accounts-view">
+      {/* Conditional Breadcrumbs when redirected from Dashboard */}
+      {fromDashboard && (
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', fontWeight: 500, color: '#557396' }}>
+            <span
+              onClick={onBackToDashboard}
+              style={{ cursor: 'pointer', color: '#063669' }}
+              title="Go to Dashboard"
+            >
+              Dashboard
+            </span>
+            <ChevronRight size={14} />
+            <span style={{ color: '#063669', fontWeight: 700 }}>
+              Company Accounts
+            </span>
+          </nav>
+        </div>
+      )}
       <div className="dashboard-banner">
         <div className="banner-text">
           <h2>Company Accounts</h2>

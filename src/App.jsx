@@ -63,6 +63,7 @@ export default function App() {
   // Interactive View Filter State
   const [leadsSourceFilter, setLeadsSourceFilter] = useState('');
   const [leadsOverdueOnly, setLeadsOverdueOnly] = useState(false);
+  const [activitiesInitialTab, setActivitiesInitialTab] = useState('All');
 
   const handleOpenProfile = () => {
     setSelectedLead(null);
@@ -137,15 +138,16 @@ export default function App() {
     setSelectedLead(null);
     setSelectedAccount(null);
     setIsProfileActive(false);
-    setFromDashboard(false);
+    setFromDashboard(true);
     setActiveModule('accounts');
   };
 
-  const handleNavigateToActivities = () => {
+  const handleNavigateToActivities = (tab = 'Follow-up') => {
     setSelectedLead(null);
     setSelectedAccount(null);
     setIsProfileActive(false);
-    setFromDashboard(false);
+    setFromDashboard(true);
+    setActivitiesInitialTab(tab);
     setActiveModule('activities');
   };
 
@@ -154,6 +156,7 @@ export default function App() {
     setSelectedAccount(null);
     setIsProfileActive(false);
     setFromDashboard(false);
+    setActivitiesInitialTab('All');
     setActiveModule(mod);
   };
 
@@ -468,6 +471,11 @@ export default function App() {
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
                   selectedOwnerFilter={selectedOwnerFilter}
+                  fromDashboard={fromDashboard}
+                  onBackToDashboard={() => {
+                    setFromDashboard(false);
+                    setActiveModule('dashboard');
+                  }}
                 />
               )}
 
@@ -493,6 +501,12 @@ export default function App() {
                   activities={activities}
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
+                  fromDashboard={fromDashboard}
+                  onBackToDashboard={() => {
+                    setFromDashboard(false);
+                    setActiveModule('dashboard');
+                  }}
+                  initialTab={activitiesInitialTab}
                 />
               )}
 

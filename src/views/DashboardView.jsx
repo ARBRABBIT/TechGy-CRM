@@ -95,7 +95,7 @@ export default function DashboardView({
   const totalCompanies = filteredAccounts.length;
   const totalLeadsCount = filteredLeads.length;
   const overdueLeadsCount = filteredLeads.filter(l => l.isOverdue).length;
-  const todayFollowupsCount = filteredActivities.filter(a => a.type === 'Follow-up' && !a.isOverdue).length;
+  const todayFollowupsCount = filteredActivities.filter(a => a.type === 'Follow-up').length;
 
   // Active revenue data based on toggle
   const currentRevObj = REVENUE_DATA[revenueToggle] || REVENUE_DATA.Monthly;
@@ -448,7 +448,7 @@ export default function DashboardView({
 
         <div
           className="counter-card"
-          onClick={() => onNavigateToActivities()}
+          onClick={() => onNavigateToActivities('Follow-up')}
           title="Clicking opens Today's Follow-ups in Activities"
         >
           <div>
