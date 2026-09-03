@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { X, Plus, Edit2, UserPlus, CheckSquare, FileText, Calendar, Trash2 } from 'lucide-react';
 import { INITIAL_OWNERS, LEAD_SOURCES } from '../data/mockData';
+import FormDateSelector from './FormDateSelector';
+
+const STAGE_DEFAULT_PROBABILITIES = {
+  'Discovery': '20%',
+  'Qualified': '40%',
+  'Proposal Sent': '60%',
+  'Negotiation': '80%',
+  'Won': '100%',
+  'Lost': '0%'
+};
 
 export default function CommonActionsModal({ isOpen, onClose, onSave, initialType = 'createLead' }) {
   const [actionType, setActionType] = useState(initialType);
@@ -113,7 +123,14 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                     <select 
                       className="form-select"
                       value={formData.currentStage}
-                      onChange={(e) => setFormData({ ...formData, currentStage: e.target.value })}
+                      onChange={(e) => {
+                        const newStage = e.target.value;
+                        setFormData(prev => ({
+                          ...prev,
+                          currentStage: newStage,
+                          probability: STAGE_DEFAULT_PROBABILITIES[newStage] !== undefined ? STAGE_DEFAULT_PROBABILITIES[newStage] : prev.probability
+                        }));
+                      }}
                     >
                       <option value="Discovery">Discovery</option>
                       <option value="Qualified">Qualified</option>
@@ -124,24 +141,36 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Probability (%)</label>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="e.g. 60%"
-                      value={formData.probability}
-                      onChange={(e) => setFormData({ ...formData, probability: e.target.value })}
-                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <label className="form-label">Probability (%)</label>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#063669' }}>
+                        {Math.min(100, Math.max(0, parseInt(formData.probability, 10) || 0))}%
+                      </span>
+                    </div>
+                    <div className="probability-slider-wrapper">
+                      <input 
+                        type="range" 
+                        min="0" 
+                        max="100" 
+                        step="5"
+                        value={Math.min(100, Math.max(0, parseInt(formData.probability, 10) || 0))}
+                        onChange={(e) => setFormData({ ...formData, probability: `${e.target.value}%` })}
+                        className="probability-range-slider"
+                        style={{
+                          background: `linear-gradient(to right, #063669 ${Math.min(100, Math.max(0, parseInt(formData.probability, 10) || 0))}%, #E2E8F0 ${Math.min(100, Math.max(0, parseInt(formData.probability, 10) || 0))}%)`
+                        }}
+                        aria-label="Probability percentage slider"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="form-grid-2">
                   <div className="form-group">
                     <label className="form-label">Expected Close Date</label>
-                    <input 
-                      type="date" 
-                      className="form-input" 
+                    <FormDateSelector 
                       value={formData.closeDate}
-                      onChange={(e) => setFormData({ ...formData, closeDate: e.target.value })}
+                      onChange={(newDate) => setFormData({ ...formData, closeDate: newDate })}
+                      placement="top"
                     />
                   </div>
                   <div className="form-group">

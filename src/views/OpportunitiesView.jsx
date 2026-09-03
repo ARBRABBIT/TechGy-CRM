@@ -24,7 +24,8 @@ export default function OpportunitiesView({
   searchQuery: globalSearchQuery = '', 
   selectedDateFilter = 'This Month',
   selectedOwnerFilter = 'All Owners',
-  onOpenCreateModal
+  onOpenCreateModal,
+  onTriggerToast
 }) {
   // Local View States
   const [localSearch, setLocalSearch] = useState('');
@@ -75,10 +76,10 @@ export default function OpportunitiesView({
   const paginatedOpps = filteredOpps.slice(startIndex, startIndex + pageSize);
 
   // Quick Action Notification Toast helper
-  const [toastMessage, setToastMessage] = useState(null);
   const triggerLocalToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    if (onTriggerToast) {
+      onTriggerToast(msg);
+    }
   };
 
   // Stage change handler
@@ -86,9 +87,6 @@ export default function OpportunitiesView({
     if (onUpdateOpportunityStage) {
       onUpdateOpportunityStage(oppId, newStage);
     }
-    const opp = opportunities.find(o => o.id === oppId);
-    const oppName = opp ? opp.opportunityName : 'Opportunity';
-    triggerLocalToast(`Moved "${oppName}" to ${newStage}`);
   };
 
   // Helper for owner avatar styling and initials
@@ -141,30 +139,7 @@ export default function OpportunitiesView({
 
   return (
     <div className="opportunities-view-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-      
-      {/* Toast Notification Banner */}
-      {toastMessage && (
-        <div style={{
-          position: 'fixed',
-          top: '20px',
-          right: '20px',
-          zIndex: 9999,
-          background: '#063669',
-          color: '#FFFFFF',
-          padding: '12px 20px',
-          borderRadius: '10px',
-          boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          fontSize: '0.875rem',
-          fontWeight: 600,
-          animation: 'cardPopIn 0.2s ease-out'
-        }}>
-          <CheckCircle2 size={18} color="#10B981" />
-          {toastMessage}
-        </div>
-      )}
+
 
       {/* Top Section Page Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>

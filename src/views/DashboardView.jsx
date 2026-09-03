@@ -454,13 +454,36 @@ export default function DashboardView({
       <div className="section-card">
         <div className="section-header">
           <div>
-            <h3 className="section-title">Follow-up Action List</h3>
-            <div style={{ fontSize: '0.8rem', color: '#557396' }}>
+            <h3 className="section-title" style={{ margin: 0, marginBottom: '2px', lineHeight: 1.25 }}>Follow-up Action List</h3>
+            <div style={{ fontSize: '0.8rem', color: '#557396', margin: 0, lineHeight: 1.3 }}>
               Today's follow-ups and overdue activities requiring immediate sales action.
             </div>
           </div>
-          <button className="btn-secondary" onClick={() => onNavigateToLeads()}>
-            View All Leads <ChevronRight size={16} />
+          <button
+            type="button"
+            onClick={() => onNavigateToLeads()}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              font: 'inherit',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              color: '#063669',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.35rem',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+              transition: 'color 0.2s ease'
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#137FEC')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#063669')}
+            title="Navigate to All Leads"
+          >
+            <span>View All Leads</span>
+            <ChevronRight size={16} style={{ strokeWidth: 2.5 }} />
           </button>
         </div>
 

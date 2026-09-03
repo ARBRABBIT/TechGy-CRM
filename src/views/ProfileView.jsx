@@ -241,9 +241,13 @@ export default function ProfileView({
 
       {/* Saved Toast Notification */}
       {savedSuccess && (
-        <div style={{ backgroundColor: '#063669', color: '#FFFFFF', padding: '0.75rem 1.25rem', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, fontSize: '0.85rem' }}>
-          <CheckCircle2 size={18} />
-          Profile settings saved successfully!
+        <div className="toast-banner" style={{ width: 'fit-content', minWidth: '300px', animation: 'toastActionSlideIn 0.35s ease' }}>
+          <div className="toast-icon-wrap" style={{ width: '32px', height: '32px', minWidth: '32px' }}>
+            <CheckCircle2 size={16} />
+          </div>
+          <div className="toast-content">
+            <div className="toast-title" style={{ fontSize: '0.85rem' }}>Profile settings saved successfully!</div>
+          </div>
         </div>
       )}
 

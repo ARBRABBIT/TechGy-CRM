@@ -140,7 +140,7 @@ export default function ActivitiesView({
             </div>
           ) : (
             filteredActivities.map((act) => (
-              <div key={act.id} className="timeline-item">
+              <div key={`${activeTab}-${act.id}`} className="timeline-item">
                 <div className="timeline-icon">
                   {getIcon(act.type)}
                 </div>

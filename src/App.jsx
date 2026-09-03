@@ -28,7 +28,7 @@ import {
   INITIAL_CONTACTS,
   INITIAL_NOTIFICATIONS
 } from './data/mockData';
-import { Bell, X } from 'lucide-react';
+import { CheckCircle2, Bell, X } from 'lucide-react';
 
 export default function App() {
   // Authentication State (Default to logged in on refresh; persist session)
@@ -95,11 +95,15 @@ export default function App() {
     setFromDashboard(false);
   };
 
-  const triggerToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage(null);
-    }, 3500);
+  const triggerToast = (payload, desc = '') => {
+    if (typeof payload === 'object' && payload !== null) {
+      setToastMessage(payload);
+    } else if (typeof payload === 'string' && payload.includes(': ')) {
+      const [title, ...rest] = payload.split(': ');
+      setToastMessage({ title, description: rest.join(': ') });
+    } else {
+      setToastMessage({ title: payload, description: desc });
+    }
   };
 
   const pushNotification = (title, message, category = 'Lead', targetModule = 'leads') => {
@@ -664,6 +668,7 @@ export default function App() {
                     setModalInitialType(type);
                     setIsCreateModalOpen(true);
                   }}
+                  onTriggerToast={triggerToast}
                 />
               )}
 
@@ -797,16 +802,31 @@ export default function App() {
       {toastMessage && (
         <div className="toast-container">
           <div className="toast-banner">
-            <Bell size={18} />
-            <span>{toastMessage}</span>
+            <div className="toast-icon-wrap">
+              <CheckCircle2 size={18} />
+            </div>
+            <div className="toast-content">
+              {typeof toastMessage === 'object' ? (
+                <>
+                  <div className="toast-title">{toastMessage.title}</div>
+                  {toastMessage.description && (
+                    <div className="toast-desc">{toastMessage.description}</div>
+                  )}
+                </>
+              ) : (
+                <div className="toast-title">{toastMessage}</div>
+              )}
+            </div>
             <button
               type="button"
               className="toast-dismiss-btn"
               onClick={() => setToastMessage(null)}
               title="Dismiss"
+              aria-label="Dismiss notification"
             >
-              <X size={14} />
+              <X size={15} />
             </button>
+            <div className="toast-progress-bar" />
           </div>
         </div>
       )}
