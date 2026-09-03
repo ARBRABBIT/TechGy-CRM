@@ -25,6 +25,7 @@ export default function LeadDetailView({
   onQuickAction,
   onNavigateToAccount,
   navigationSource = 'leads',
+  fromDashboard = false,
   onNavigateToActivities,
   onNavigateToProposals,
   onNavigateToContacts
@@ -113,14 +114,18 @@ export default function LeadDetailView({
             </>
           ) : (
             <>
-              <span
-                onClick={onNavigateHome}
-                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-                title="Go to Dashboard"
-              >
-                Dashboard
-              </span>
-              <ChevronRight size={14} />
+              {fromDashboard && (
+                <>
+                  <span
+                    onClick={onNavigateHome}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                    title="Go to Dashboard"
+                  >
+                    Dashboard
+                  </span>
+                  <ChevronRight size={14} />
+                </>
+              )}
               <span
                 onClick={onBack}
                 style={{ cursor: 'pointer', color: '#063669' }}

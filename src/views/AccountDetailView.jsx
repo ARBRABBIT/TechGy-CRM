@@ -28,10 +28,13 @@ export default function AccountDetailView({
   onSelectLead,
   onOpenCreateModal,
   navigationSource = 'accounts',
+  fromDashboard = false,
   initialTab,
   onNavigateToActivities,
   onNavigateToProposals,
-  onNavigateToContacts
+  onNavigateToContacts,
+  onNavigateToOpportunities,
+  onNavigateToLeads
 }) {
   const [activeTab, setActiveTab] = useState(() => {
     if (initialTab) return initialTab;
@@ -145,22 +148,54 @@ export default function AccountDetailView({
                 {account.companyName}
               </span>
             </>
-          ) : (
+          ) : navigationSource === 'opportunities' ? (
             <>
               <span
-                onClick={onNavigateHome}
-                style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
-                title="Go to Dashboard"
+                onClick={onNavigateToOpportunities || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Opportunities Pipeline"
               >
-                Dashboard
+                Opportunities Pipeline
               </span>
               <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : navigationSource === 'leads' ? (
+            <>
+              <span
+                onClick={onNavigateToLeads || onBack}
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Leads Directory & Sales Pipeline"
+              >
+                Leads Directory & Sales Pipeline
+              </span>
+              <ChevronRight size={14} />
+              <span style={{ color: '#063669', fontWeight: 700 }}>
+                {account.companyName}
+              </span>
+            </>
+          ) : (
+            <>
+              {fromDashboard && (
+                <>
+                  <span
+                    onClick={onNavigateHome}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#063669' }}
+                    title="Go to Dashboard"
+                  >
+                    Dashboard
+                  </span>
+                  <ChevronRight size={14} />
+                </>
+              )}
               <span
                 onClick={onBack}
-                style={{ cursor: 'pointer', color: '#063669' }}
-                title="Return to Accounts Directory & Client Portfolios"
+                style={{ cursor: 'pointer', color: '#063669', fontWeight: 600 }}
+                title="Return to Company Accounts"
               >
-                Accounts Directory & Client Portfolios
+                Company Accounts
               </span>
               <ChevronRight size={14} />
               <span style={{ color: '#063669', fontWeight: 700 }}>

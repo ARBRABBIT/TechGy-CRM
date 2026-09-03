@@ -198,10 +198,13 @@ export default function App() {
     setIsProfileActive(false);
     setFromDashboard(false);
     if (category === 'lead') {
+      setLeadNavSource('leads');
       setSelectedAccount(null);
       setSelectedLead(item);
       setActiveModule('leads');
     } else if (category === 'account') {
+      setLeadNavSource('accounts');
+      setAccountInitialTab('Leads');
       setSelectedLead(null);
       const fullAcc = accounts.find(a => a.companyName.toLowerCase() === item.companyName.toLowerCase()) || item;
       setSelectedAccount(fullAcc);
@@ -218,6 +221,8 @@ export default function App() {
       setSelectedLead(null);
       const parentAcc = accounts.find(a => a.companyName.toLowerCase() === item.company.toLowerCase());
       if (parentAcc) {
+        setLeadNavSource('contacts');
+        setAccountInitialTab('Contacts');
         setSelectedAccount(parentAcc);
       }
       setActiveModule('contacts');
@@ -257,6 +262,7 @@ export default function App() {
   const handleNavigateToCompanyAccount = (companyName) => {
     const parentAcc = accounts.find(a => a.companyName.toLowerCase() === companyName.toLowerCase());
     if (parentAcc) {
+      setLeadNavSource('leads');
       setSelectedLead(null);
       setSelectedAccount(parentAcc);
       setIsProfileActive(false);
@@ -441,6 +447,7 @@ export default function App() {
               onQuickAction={handleQuickAction}
               onNavigateToAccount={handleNavigateToCompanyAccount}
               navigationSource={leadNavSource}
+              fromDashboard={fromDashboard}
               onNavigateToActivities={() => {
                 setSelectedLead(null);
                 setSelectedAccount(null);
@@ -455,6 +462,11 @@ export default function App() {
                 setSelectedLead(null);
                 setSelectedAccount(null);
                 setActiveModule('contacts');
+              }}
+              onNavigateToOpportunities={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('opportunities');
               }}
             />
           ) : selectedAccount ? (
@@ -484,6 +496,7 @@ export default function App() {
                 setIsCreateModalOpen(true);
               }}
               navigationSource={leadNavSource}
+              fromDashboard={fromDashboard}
               onNavigateToActivities={() => {
                 setSelectedLead(null);
                 setSelectedAccount(null);
@@ -498,6 +511,16 @@ export default function App() {
                 setSelectedLead(null);
                 setSelectedAccount(null);
                 setActiveModule('contacts');
+              }}
+              onNavigateToOpportunities={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('opportunities');
+              }}
+              onNavigateToLeads={() => {
+                setSelectedLead(null);
+                setSelectedAccount(null);
+                setActiveModule('leads');
               }}
             />
           ) : (
@@ -583,6 +606,7 @@ export default function App() {
                   onSelectAccount={(companyName) => {
                     const fullAcc = accounts.find(a => a.companyName.toLowerCase() === companyName.toLowerCase());
                     if (fullAcc) {
+                      setLeadNavSource('opportunities');
                       setSelectedLead(null);
                       setSelectedAccount(fullAcc);
                       setActiveModule('accounts');
