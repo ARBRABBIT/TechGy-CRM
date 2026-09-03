@@ -66,9 +66,16 @@ export default function ContactsView({ contacts = [], onSelectAccount, searchQue
               </tr>
             </thead>
             <tbody>
-              {filteredContacts.map((con) => (
-                <tr key={con.id}>
-                  <td style={{ fontWeight: 700, color: '#063669' }}>{con.name}</td>
+              {filteredContacts.length === 0 ? (
+                <tr>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem 1rem', color: '#557396' }}>
+                    No contacts found matching the current filter criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredContacts.map((con) => (
+                  <tr key={con.id}>
+                    <td style={{ fontWeight: 700, color: '#063669' }}>{con.name}</td>
                   <td>
                     <span
                       style={{ fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
@@ -88,7 +95,7 @@ export default function ContactsView({ contacts = [], onSelectAccount, searchQue
                     </span>
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

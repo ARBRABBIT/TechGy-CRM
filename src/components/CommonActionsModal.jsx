@@ -16,7 +16,12 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
     priority: 'Medium',
     notes: '',
     nextAction: '',
-    dueDate: '2026-09-02'
+    dueDate: '2026-09-02',
+    opportunityName: '',
+    estimatedValue: '',
+    currentStage: 'Qualified',
+    probability: '60%',
+    closeDate: '2026-09-28'
   });
 
   useEffect(() => {
@@ -55,6 +60,7 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
                 value={actionType} 
                 onChange={(e) => setActionType(e.target.value)}
               >
+                <option value="createOpportunity">Create New Opportunity</option>
                 <option value="createLead">Create New Lead</option>
                 <option value="assignOwner">Assign Owner</option>
                 <option value="changeStatus">Change Status</option>
@@ -64,6 +70,94 @@ export default function CommonActionsModal({ isOpen, onClose, onSave, initialTyp
             </div>
 
             {/* Dynamic Form Fields */}
+            {actionType === 'createOpportunity' && (
+              <>
+                <div className="form-group">
+                  <label className="form-label">Opportunity Name *</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    required 
+                    placeholder="e.g. Tata Tech – Cloud ERP Integration"
+                    value={formData.opportunityName}
+                    onChange={(e) => setFormData({ ...formData, opportunityName: e.target.value })}
+                  />
+                </div>
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Company / Account Name *</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      required 
+                      placeholder="e.g. Tata Consultancy Tech Ltd"
+                      value={formData.company}
+                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Estimated Value *</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      required
+                      placeholder="e.g. ₹75.00 Lakh or ₹1.20 Cr"
+                      value={formData.estimatedValue}
+                      onChange={(e) => setFormData({ ...formData, estimatedValue: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Current Stage</label>
+                    <select 
+                      className="form-select"
+                      value={formData.currentStage}
+                      onChange={(e) => setFormData({ ...formData, currentStage: e.target.value })}
+                    >
+                      <option value="Discovery">Discovery</option>
+                      <option value="Qualified">Qualified</option>
+                      <option value="Proposal Sent">Proposal Sent</option>
+                      <option value="Negotiation">Negotiation</option>
+                      <option value="Won">Won</option>
+                      <option value="Lost">Lost</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Probability (%)</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="e.g. 60%"
+                      value={formData.probability}
+                      onChange={(e) => setFormData({ ...formData, probability: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <div className="form-grid-2">
+                  <div className="form-group">
+                    <label className="form-label">Expected Close Date</label>
+                    <input 
+                      type="date" 
+                      className="form-input" 
+                      value={formData.closeDate}
+                      onChange={(e) => setFormData({ ...formData, closeDate: e.target.value })}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Opportunity Owner</label>
+                    <select 
+                      className="form-select"
+                      value={formData.owner}
+                      onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
+                    >
+                      {INITIAL_OWNERS.filter(o => o !== 'All Owners').map(o => <option key={o} value={o}>{o}</option>)}
+                    </select>
+                  </div>
+                </div>
+              </>
+            )}
+
             {actionType === 'createLead' && (
               <>
                 <div className="form-group">

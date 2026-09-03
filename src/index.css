@@ -1781,14 +1781,21 @@ button,
   gap: 0.3rem;
   min-width: 0;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .form-grid-2 {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   width: 100%;
   box-sizing: border-box;
+}
+
+.form-grid-2 .form-group {
+  width: 100% !important;
+  min-width: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .form-label {
@@ -2138,7 +2145,7 @@ button,
   margin-bottom: 28px;
 }
 
-.form-group {
+.login-form .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -2146,7 +2153,7 @@ button,
   width: 454px;
 }
 
-.form-label {
+.login-form .form-label {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 600;
   font-size: 14px;

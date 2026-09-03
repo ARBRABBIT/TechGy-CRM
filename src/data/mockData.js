@@ -293,7 +293,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹45.50 Lakh',
     currentStage: 'Proposal Sent',
     probability: '60%',
-    expectedClosureDate: '28 Oct 2024',
+    expectedClosureDate: '28 Sep 2026',
+    createdDate: '2026-08-15',
     owner: 'Rahul Verma',
     score: 78,
     visualLevel: 'High'
@@ -305,7 +306,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹1.20 Cr',
     currentStage: 'Negotiation',
     probability: '85%',
-    expectedClosureDate: '15 Nov 2024',
+    expectedClosureDate: '15 Sep 2026',
+    createdDate: '2026-08-18',
     owner: 'Priya Sharma',
     score: 90,
     visualLevel: 'High'
@@ -317,7 +319,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹8.75 Lakh',
     currentStage: 'Discovery',
     probability: '20%',
-    expectedClosureDate: '10 Dec 2024',
+    expectedClosureDate: '10 Sep 2026',
+    createdDate: '2026-08-20',
     owner: 'Rahul Verma',
     score: 45,
     visualLevel: 'Low'
@@ -329,7 +332,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹8.75 Lakh',
     currentStage: 'Discovery',
     probability: '20%',
-    expectedClosureDate: '10 Dec 2024',
+    expectedClosureDate: '12 Sep 2026',
+    createdDate: '2026-08-22',
     owner: 'Rahul Verma',
     score: 45,
     visualLevel: 'Low'
@@ -341,7 +345,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹8.75 Lakh',
     currentStage: 'Discovery',
     probability: '20%',
-    expectedClosureDate: '10 Dec 2024',
+    expectedClosureDate: '14 Sep 2026',
+    createdDate: '2026-08-25',
     owner: 'Rahul Verma',
     score: 45,
     visualLevel: 'Low'
@@ -353,7 +358,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹8.75 Lakh',
     currentStage: 'Discovery',
     probability: '20%',
-    expectedClosureDate: '10 Dec 2024',
+    expectedClosureDate: '16 Sep 2026',
+    createdDate: '2026-08-26',
     owner: 'Rahul Verma',
     score: 45,
     visualLevel: 'Low'
@@ -365,7 +371,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹8.75 Lakh',
     currentStage: 'Discovery',
     probability: '20%',
-    expectedClosureDate: '10 Dec 2024',
+    expectedClosureDate: '18 Sep 2026',
+    createdDate: '2026-08-28',
     owner: 'Rahul Verma',
     score: 45,
     visualLevel: 'Low'
@@ -377,7 +384,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹1.80 Cr',
     currentStage: 'Proposal Sent',
     probability: '80%',
-    expectedClosureDate: '30 Sep 2024',
+    expectedClosureDate: '30 Sep 2026',
+    createdDate: '2026-08-10',
     owner: 'Rajesh Sharma',
     score: 85,
     visualLevel: 'High'
@@ -389,7 +397,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹3.20 Cr',
     currentStage: 'Negotiation',
     probability: '90%',
-    expectedClosureDate: '15 Sep 2024',
+    expectedClosureDate: '15 Sep 2026',
+    createdDate: '2026-08-05',
     owner: 'Priya Patel',
     score: 92,
     visualLevel: 'High'
@@ -401,7 +410,8 @@ export const INITIAL_OPPORTUNITIES = [
     estimatedValue: '₹1.40 Cr',
     currentStage: 'Discovery',
     probability: '60%',
-    expectedClosureDate: '15 Oct 2024',
+    expectedClosureDate: '25 Sep 2026',
+    createdDate: '2026-08-12',
     owner: 'Amit Verma',
     score: 65,
     visualLevel: 'Medium'
@@ -422,7 +432,8 @@ export const INITIAL_OPPORTUNITIES = [
       estimatedValue: `₹${(15 + num * 2.5).toFixed(2)} Lakh`,
       currentStage: stg,
       probability: prob,
-      expectedClosureDate: `${(num % 28) + 1} Dec 2024`,
+      expectedClosureDate: `${(num % 28) + 1} Sep 2026`,
+      createdDate: '2026-08-15',
       owner: own,
       score: 50 + (num % 45),
       visualLevel: num % 2 === 0 ? 'High' : 'Medium'

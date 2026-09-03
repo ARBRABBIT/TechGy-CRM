@@ -55,12 +55,19 @@ export default function ProposalsView({ proposals = [], searchQuery = '', select
               </tr>
             </thead>
             <tbody>
-              {filteredProposals.map((prop) => (
-                <tr key={prop.id}>
-                  <td>
-                    <button
-                      type="button"
-                      className="table-link-btn"
+              {filteredProposals.length === 0 ? (
+                <tr>
+                  <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem 1rem', color: '#557396' }}>
+                    No proposals found matching the current filter criteria.
+                  </td>
+                </tr>
+              ) : (
+                filteredProposals.map((prop) => (
+                  <tr key={prop.id}>
+                    <td>
+                      <button
+                        type="button"
+                        className="table-link-btn"
                       onClick={() => handleAccountClick(prop.company)}
                       title={`View ${prop.company} account details`}
                       style={{ background: 'none', border: 'none', padding: 0, font: 'inherit', fontWeight: 700, color: '#063669', cursor: 'pointer', textDecoration: 'underline' }}
@@ -90,7 +97,7 @@ export default function ProposalsView({ proposals = [], searchQuery = '', select
                   </td>
                   <td>{prop.owner}</td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

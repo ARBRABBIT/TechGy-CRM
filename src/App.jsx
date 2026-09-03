@@ -244,7 +244,8 @@ export default function App() {
         visualLevel: 'Medium',
         estimatedValue: '₹1,20,00,000',
         probability: '60%',
-        expectedClosureDate: '2026-10-30',
+        expectedClosureDate: '2026-09-28',
+        createdDate: new Date().toISOString().split('T')[0],
         currentStage: 'Qualified',
         owner: lead.leadOwner
       };
@@ -274,7 +275,51 @@ export default function App() {
 
   // Common Action Save Handler
   const handleSaveAction = (type, formData) => {
-    if (type === 'createLead') {
+    if (type === 'createOpportunity') {
+      const closeDateFormatted = formData.closeDate || '2026-09-28';
+      const oppTitle = formData.opportunityName || `${formData.company || 'Enterprise'} Opportunity`;
+      const compName = formData.company || 'Enterprise Client';
+      const probVal = formData.probability ? (formData.probability.includes('%') ? formData.probability : `${formData.probability}%`) : '60%';
+
+      const newOppObj = {
+        id: `OPP-${Date.now()}`,
+        opportunityName: oppTitle,
+        accountName: compName,
+        estimatedValue: formData.estimatedValue || '₹50.00 Lakh',
+        currentStage: formData.currentStage || 'Qualified',
+        probability: probVal,
+        expectedClosureDate: closeDateFormatted,
+        createdDate: new Date().toISOString().split('T')[0],
+        owner: formData.owner || 'Rajesh Sharma',
+        score: 80,
+        visualLevel: 'High'
+      };
+
+      setOpportunities([newOppObj, ...opportunities]);
+      pushNotification('New Opportunity Created', `Opportunity "${oppTitle}" created for ${compName}`, 'Opportunity', 'opportunities');
+
+      // Ensure Account exists or increment its opp count
+      const existingAcc = accounts.find(a => a.companyName.toLowerCase() === compName.toLowerCase());
+      if (!existingAcc) {
+        const newAcc = {
+          id: `ACC-${Date.now()}`,
+          companyName: compName,
+          industry: 'Enterprise Technology',
+          companySize: '100-500 employees',
+          website: `www.${compName.toLowerCase().replace(/[^a-z]/g, '')}.co.in`,
+          location: 'Mumbai, MH',
+          accountOwner: formData.owner || 'Rajesh Sharma',
+          estimatedAccountValue: formData.estimatedValue || '₹1,00,00,000',
+          leadsCount: 0,
+          contactsCount: 1,
+          oppsCount: 1,
+          proposalsCount: 0
+        };
+        setAccounts([newAcc, ...accounts]);
+      } else {
+        setAccounts(accounts.map(a => a.id === existingAcc.id ? { ...a, oppsCount: (a.oppsCount || 0) + 1 } : a));
+      }
+    } else if (type === 'createLead') {
       const newLeadObj = {
         id: `LD-${Date.now()}`,
         leadName: formData.leadName,
@@ -387,7 +432,7 @@ export default function App() {
           selectedOwnerFilter={selectedOwnerFilter}
           setSelectedOwnerFilter={setSelectedOwnerFilter}
           setMobileOpen={setMobileOpen}
-          onOpenCreateModal={(type = 'createLead') => {
+          onOpenCreateModal={(type = (activeModule === 'opportunities' ? 'createOpportunity' : 'createLead')) => {
             setModalInitialType(type);
             setIsCreateModalOpen(true);
           }}
@@ -615,7 +660,7 @@ export default function App() {
                   searchQuery={searchQuery}
                   selectedDateFilter={selectedDateFilter}
                   selectedOwnerFilter={selectedOwnerFilter}
-                  onOpenCreateModal={(type = 'createLead') => {
+                  onOpenCreateModal={(type = 'createOpportunity') => {
                     setModalInitialType(type);
                     setIsCreateModalOpen(true);
                   }}

@@ -308,7 +308,7 @@ export default function OpportunitiesView({
             <button
               onClick={() => {
                 if (onOpenCreateModal) {
-                  onOpenCreateModal('createLead');
+                  onOpenCreateModal('createOpportunity');
                 } else {
                   triggerLocalToast('Opened New Opportunity Workspace');
                 }
