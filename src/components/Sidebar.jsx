@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   LayoutDashboard,
   Users,
@@ -8,8 +8,7 @@ import {
   FileText,
   Contact,
   ShieldCheck,
-  ChevronLeft,
-  ChevronRight,
+  PanelLeft,
   X
 } from 'lucide-react';
 
@@ -32,53 +31,101 @@ export default function Sidebar({
   setIsCollapsed,
   onOpenProfile
 }) {
+  const [hoverAfterIcons, setHoverAfterIcons] = useState(false);
+  const [hoverHeader, setHoverHeader] = useState(false);
+  const showToggleIcon = isCollapsed && (hoverHeader || hoverAfterIcons);
+
   return (
-    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
-      {/* Sidebar Header - Clicking Logo Box Toggles Sidebar */}
+    <aside 
+      className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}
+      onMouseLeave={() => {
+        setHoverAfterIcons(false);
+        setHoverHeader(false);
+      }}
+    >
+      {/* Sidebar Header */}
       <div className="sidebar-header">
-        <div
-          className="brand-container"
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          style={{ cursor: 'pointer' }}
-          title={isCollapsed ? "Click to expand sidebar" : "Click to collapse sidebar"}
-        >
-          {/* Logo Box with Hover Reveal Button */}
-          <div className="brand-logo-wrapper">
+        {isCollapsed ? (
+          <div
+            className={`brand-logo-wrapper ${showToggleIcon ? 'show-toggle' : ''}`}
+            onClick={() => setIsCollapsed(false)}
+            onMouseEnter={() => setHoverHeader(true)}
+            onMouseLeave={() => setHoverHeader(false)}
+            title="Expand Sidebar"
+            style={{ cursor: 'pointer' }}
+          >
+            {/* 1. Default Display: Company Logo */}
             <div className="brand-logo" title="TechGy Link">
-              <img src="/vector.png" alt="TechGy Link Logo" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+              <img
+                src="/vector.png"
+                alt="TechGy Link Logo"
+                style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+              />
             </div>
+
+            {/* 2. On Hover Display: Sidebar Toggle Icon (PanelLeft) */}
             <button
+              type="button"
               className="sidebar-collapse-hover-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                setIsCollapsed(!isCollapsed);
+                setIsCollapsed(false);
               }}
-              title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+              title="Expand Sidebar"
+              aria-label="Expand Sidebar"
             >
-              {isCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+              <PanelLeft size={21} />
             </button>
           </div>
-
-          {!isCollapsed && (
-            <div className="brand-text">
-              <span className="brand-title">TechGy Link</span>
-              <div className="brand-subtitle">Internal Workspace</div>
+        ) : (
+          <div className="sidebar-header-expanded">
+            <div
+              className="brand-container"
+              onClick={() => setActiveModule('dashboard')}
+              style={{ cursor: 'pointer' }}
+              title="TechGy Link Dashboard"
+            >
+              <div className="brand-logo" title="TechGy Link">
+                <img
+                  src="/vector.png"
+                  alt="TechGy Link Logo"
+                  style={{ width: '22px', height: '22px', objectFit: 'contain' }}
+                />
+              </div>
+              <div className="brand-text">
+                <span className="brand-title">TechGy Link</span>
+                <div className="brand-subtitle">Internal Workspace</div>
+              </div>
             </div>
-          )}
-        </div>
+            <button
+              type="button"
+              className="sidebar-toggle-btn"
+              onClick={() => setIsCollapsed(true)}
+              title="Collapse Sidebar"
+              aria-label="Collapse Sidebar"
+            >
+              <PanelLeft size={21} />
+            </button>
+          </div>
+        )}
 
         {mobileOpen && (
           <button
+            type="button"
             onClick={() => setMobileOpen(false)}
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
+            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '0.25rem' }}
+            title="Close Sidebar"
           >
             <X size={20} />
           </button>
         )}
       </div>
 
-      {/* Navigation Menu (Module Item Clicks navigate; clicking between icons does NOT open sidebar) */}
-      <nav className="sidebar-menu">
+      {/* Navigation Menu (Module Item Clicks navigate; navigating between icons keeps showing company logo) */}
+      <nav 
+        className="sidebar-menu"
+        onMouseEnter={() => setHoverAfterIcons(false)}
+      >
         {MODULES.map((item) => {
           const Icon = item.icon;
           const isActive = activeModule === item.id;
@@ -106,9 +153,11 @@ export default function Sidebar({
         })}
       </nav>
 
-      {/* Empty space below icons (Clicking here opens/collapses sidebar) */}
+      {/* Empty space below icons (Hovering here reveals sidebar icon at top; clicking here opens/collapses sidebar) */}
       <div
         className="sidebar-empty-click-area"
+        onMouseEnter={() => setHoverAfterIcons(true)}
+        onMouseLeave={() => setHoverAfterIcons(false)}
         onClick={() => setIsCollapsed(!isCollapsed)}
         style={{ flex: 1, cursor: 'pointer', minHeight: '40px' }}
         title={isCollapsed ? "Click empty space to expand sidebar" : "Click empty space to collapse sidebar"}

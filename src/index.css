@@ -120,9 +120,9 @@ body {
   }
 }
 
-/* Apply Page Entrance Animation to All Screen Views & Full Page Detail Views */
-.content-body>div,
-.content-body>*,
+/* Page Views - Instant Navigation (No entrance animation) */
+.content-body > div,
+.content-body > *,
 .dashboard-view,
 .leads-view,
 .accounts-view,
@@ -133,14 +133,13 @@ body {
 .profile-view,
 .lead-detail-page,
 .account-detail-page {
-  animation: pageFadeInUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: opacity, transform;
+  animation: none !important;
 }
 
 .timeline-item,
 .action-table tbody tr,
 .counter-card {
-  animation: tabSwitchFade 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: none !important;
 }
 
 /* Fixed Sidebar - Minimal #063669 & #F9F9F9 */
@@ -165,7 +164,7 @@ body {
 }
 
 .sidebar-header {
-  padding: 1.25rem 1rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -173,17 +172,17 @@ body {
   height: 64px;
 }
 
-.brand-container {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  width: 100%;
-  overflow: hidden;
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+  padding: 0;
 }
 
-.sidebar.collapsed .brand-container {
-  justify-content: center;
+.sidebar-header-expanded {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 .brand-logo-wrapper {
@@ -191,6 +190,9 @@ body {
   width: 36px;
   height: 36px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .brand-logo {
@@ -204,17 +206,20 @@ body {
   color: #063669;
   font-weight: 700;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
   transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 1;
 }
 
+/* Hover reveal button for collapsed sidebar */
 .sidebar-collapse-hover-btn {
   position: absolute;
   top: 0;
   left: 0;
   width: 36px;
   height: 36px;
-  border-radius: 9999px;
-  background: #084482;
+  border-radius: 8px !important;
+  background: transparent;
   border: none;
   color: #FFFFFF;
   display: flex;
@@ -223,18 +228,76 @@ body {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.15s ease;
 }
 
-/* Hover on logo container reveals the collapse/expand toggle button */
-.brand-container:hover .sidebar-collapse-hover-btn {
+/* Show PanelLeft icon when hovering on top logo OR on the sidebar area after the icons */
+.brand-logo-wrapper:hover .sidebar-collapse-hover-btn,
+.brand-logo-wrapper.show-toggle .sidebar-collapse-hover-btn,
+.sidebar.collapsed:has(.sidebar-empty-click-area:hover) .sidebar-collapse-hover-btn {
   opacity: 1;
   pointer-events: auto;
 }
 
-.brand-container:hover .brand-logo {
+.brand-logo-wrapper:hover .brand-logo,
+.brand-logo-wrapper.show-toggle .brand-logo,
+.sidebar.collapsed:has(.sidebar-empty-click-area:hover) .brand-logo {
   opacity: 0;
+  pointer-events: none;
+}
+
+/* Explicit rule: When navigating between icons in sidebar-menu, keep showing company logo */
+.sidebar.collapsed:has(.sidebar-menu:hover) .sidebar-collapse-hover-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.sidebar.collapsed:has(.sidebar-menu:hover) .brand-logo {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.sidebar-collapse-hover-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.sidebar-collapse-hover-btn:active {
+  transform: scale(0.95);
+}
+
+.sidebar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px !important;
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.sidebar-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  overflow: hidden;
+  min-width: 0;
 }
 
 .brand-text {
@@ -277,7 +340,7 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.15s ease, color 0.15s ease;
   white-space: nowrap;
   position: relative;
 }
@@ -290,7 +353,6 @@ body {
 .menu-item:hover {
   background-color: var(--bg-sidebar-hover);
   color: #FFFFFF;
-  transform: translateX(2px);
 }
 
 .menu-item.active {
@@ -298,7 +360,6 @@ body {
   color: var(--text-sidebar-active);
   font-weight: 600;
   border: none;
-  transform: translateX(0);
 }
 
 .menu-left {
@@ -1104,7 +1165,6 @@ body {
   box-shadow: 0 4px 14px rgba(6, 54, 105, 0.06);
   cursor: default;
   min-width: 0;
-  animation: cardPopIn 0.3s ease-out forwards;
 }
 
 .kpi-header {
@@ -1181,7 +1241,6 @@ body {
   min-width: 0;
   max-width: 100%;
   overflow: hidden;
-  animation: cardPopIn 0.3s ease-out forwards;
 }
 
 .chart-header {
@@ -1260,7 +1319,6 @@ body {
   cursor: pointer;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
   min-width: 0;
-  animation: cardPopIn 0.3s ease-out forwards;
 }
 
 .counter-card:hover {
@@ -1336,7 +1394,6 @@ body {
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
-  animation: cardPopIn 0.3s ease-out forwards;
 }
 
 .section-header {
@@ -1460,7 +1517,6 @@ button,
 .btn-primary,
 .btn-secondary,
 .toggle-btn,
-.sidebar-collapse-hover-btn,
 .icon-button,
 .cta {
   border-radius: 9999px !important;
@@ -1642,32 +1698,6 @@ button,
   font-size: 0.7rem;
   color: #063669;
   box-shadow: 0 2px 6px rgba(6, 54, 105, 0.15);
-  animation: iconPopEntrance 0.48s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-  will-change: transform, opacity;
-}
-
-.timeline-item:nth-child(1) .timeline-icon {
-  animation-delay: 0.04s;
-}
-
-.timeline-item:nth-child(2) .timeline-icon {
-  animation-delay: 0.09s;
-}
-
-.timeline-item:nth-child(3) .timeline-icon {
-  animation-delay: 0.14s;
-}
-
-.timeline-item:nth-child(4) .timeline-icon {
-  animation-delay: 0.19s;
-}
-
-.timeline-item:nth-child(5) .timeline-icon {
-  animation-delay: 0.24s;
-}
-
-.timeline-item:nth-child(6) .timeline-icon {
-  animation-delay: 0.29s;
 }
 
 .timeline-card {
@@ -1708,12 +1738,20 @@ button,
 .modal-card {
   background: white;
   border-radius: 16px;
-  width: 520px;
-  max-width: 95vw;
+  width: 560px;
+  max-width: calc(100vw - 2rem);
   box-shadow: 0 20px 50px rgba(6, 54, 105, 0.2);
   overflow: hidden;
   border: none;
   animation: cardPopIn 0.25s ease-out forwards;
+}
+
+.modal-card form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .modal-header {
@@ -1731,6 +1769,9 @@ button,
   gap: 1.15rem;
   max-height: 75vh;
   overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group {
@@ -1738,12 +1779,16 @@ button,
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  min-width: 0;
+  width: 100%;
 }
 
 .form-grid-2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label {
@@ -1759,6 +1804,8 @@ button,
 .form-select,
 .form-textarea {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   border: none;
@@ -1988,6 +2035,16 @@ button,
 
   .header-right .search-box {
     display: none;
+  }
+
+  .modal-card {
+    width: 100%;
+    margin: 0.5rem;
+  }
+
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
   }
 }
 
