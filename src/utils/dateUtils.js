@@ -50,6 +50,7 @@ function toTimestamp(dateFormattedStr) {
  */
 export function isDateInFilter(dateStr, filterValue) {
   if (!filterValue || filterValue === 'All Time') return true;
+  if (!dateStr) return true; // Keep items with unspecified date (e.g. Company Accounts)
 
   const parsed = parseDateString(dateStr);
   

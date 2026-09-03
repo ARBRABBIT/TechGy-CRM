@@ -18,7 +18,8 @@ export default function AccountsView({
       acc.location.toLowerCase().includes(q) ||
       acc.accountOwner.toLowerCase().includes(q);
 
-    const matchesDate = isDateInFilter(acc.createdDate || acc.lastContacted, selectedDateFilter);
+    const dateToCheck = acc.createdDate || acc.lastContacted;
+    const matchesDate = !dateToCheck ? true : isDateInFilter(dateToCheck, selectedDateFilter);
 
     return matchesSearch && matchesDate;
   });

@@ -84,7 +84,8 @@ export const INITIAL_ACCOUNTS = [
     leadsCount: 3,
     contactsCount: 4,
     oppsCount: 2,
-    proposalsCount: 2
+    proposalsCount: 2,
+    createdDate: '2026-08-15'
   },
   {
     id: 'ACC-102',
@@ -98,7 +99,8 @@ export const INITIAL_ACCOUNTS = [
     leadsCount: 2,
     contactsCount: 3,
     oppsCount: 1,
-    proposalsCount: 1
+    proposalsCount: 1,
+    createdDate: '2026-08-18'
   },
   {
     id: 'ACC-103',
@@ -112,7 +114,8 @@ export const INITIAL_ACCOUNTS = [
     leadsCount: 4,
     contactsCount: 5,
     oppsCount: 2,
-    proposalsCount: 1
+    proposalsCount: 1,
+    createdDate: '2026-08-20'
   },
   {
     id: 'ACC-104',
@@ -126,7 +129,8 @@ export const INITIAL_ACCOUNTS = [
     leadsCount: 2,
     contactsCount: 2,
     oppsCount: 1,
-    proposalsCount: 1
+    proposalsCount: 1,
+    createdDate: '2026-08-22'
   },
   {
     id: 'ACC-105',
@@ -140,7 +144,8 @@ export const INITIAL_ACCOUNTS = [
     leadsCount: 1,
     contactsCount: 2,
     oppsCount: 1,
-    proposalsCount: 0
+    proposalsCount: 0,
+    createdDate: '2026-08-25'
   }
 ];
 
