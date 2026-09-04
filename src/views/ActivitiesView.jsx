@@ -78,15 +78,6 @@ export default function ActivitiesView({
           </nav>
         </div>
       )}
-      <div className="dashboard-banner">
-        <div className="banner-text">
-          <h2>Activities & Engagement Timeline</h2>
-          <p>Chronological interaction log: Calls, Emails, WhatsApp, Meetings & Overdue Follow-ups</p>
-        </div>
-        <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600, zIndex: 2 }}>
-          {filteredActivities.length} Activity Logs
-        </span>
-      </div>
 
       <div className="section-card">
         <div className="tab-header">

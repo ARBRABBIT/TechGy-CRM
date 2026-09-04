@@ -142,11 +142,11 @@ export default function LeadDetailView({
         </nav>
       </div>
 
-      {/* 2. Top Banner Summary Header */}
-      <div className="dashboard-banner" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div className="banner-text">
+      {/* 2. Top Summary Header Card */}
+      <div className="section-card" style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', padding: '1.25rem 1.5rem' }}>
+        <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem' }}>
-            <h2 style={{ fontSize: '1.4rem', margin: 0 }}>{lead.leadName}</h2>
+            <h2 style={{ fontSize: '1.4rem', margin: 0, color: '#063669', fontWeight: 700 }}>{lead.leadName}</h2>
             <span className={`status-chip ${lead.status.toLowerCase()}`} style={{ fontSize: '0.8rem' }}>
               {lead.status}
             </span>
@@ -156,15 +156,14 @@ export default function LeadDetailView({
               </span>
             )}
           </div>
-          <p style={{ margin: 0 }}>
-            {lead.designation} at <strong style={{ color: 'white', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => onNavigateToAccount(lead.company)}>{lead.company}</strong> • Owner: {lead.leadOwner}
+          <p style={{ margin: 0, color: '#557396', fontSize: '0.875rem' }}>
+            {lead.designation} at <strong style={{ color: '#063669', textDecoration: 'underline', cursor: 'pointer' }} onClick={() => onNavigateToAccount(lead.company)}>{lead.company}</strong> • Owner: {lead.leadOwner}
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', zIndex: 2, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
             className="btn-primary"
-            style={{ background: '#FFFFFF', color: '#063669', borderColor: '#FFFFFF', fontWeight: 700 }}
             onClick={() => onQuickAction('convertOpportunity', lead)}
           >
             <TrendingUp size={16} /> Convert to Opportunity

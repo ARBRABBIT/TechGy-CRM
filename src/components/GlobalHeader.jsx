@@ -10,8 +10,7 @@ import {
   FileText,
   Contact,
   Calendar,
-  X,
-  LogOut
+  X
 } from 'lucide-react';
 import { INITIAL_OWNERS, INITIAL_DATE_FILTERS } from '../data/mockData';
 import NotificationsPopover from './NotificationsPopover';

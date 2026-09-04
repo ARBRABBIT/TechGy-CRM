@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Users,
   Search,
@@ -37,6 +37,8 @@ export default function LeadsView({
   const [statusFilter, setStatusFilter] = useState('All Statuses');
   const [ownerFilter, setOwnerFilter] = useState('All Owners');
   const [overdueOnly, setOverdueOnly] = useState(effectiveInitialOverdue);
+  const [selectedLeadIds, setSelectedLeadIds] = useState([]);
+  const selectAllRef = useRef(null);
 
   useEffect(() => {
     setSourceFilter(propSourceFilter || initialFilterSource);
@@ -92,6 +94,38 @@ export default function LeadsView({
     return true;
   });
 
+  const isAllSelected =
+    filteredLeads.length > 0 &&
+    filteredLeads.every((lead) => selectedLeadIds.includes(lead.id));
+
+  const isIndeterminate =
+    selectedLeadIds.length > 0 &&
+    !isAllSelected &&
+    filteredLeads.some((lead) => selectedLeadIds.includes(lead.id));
+
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = isIndeterminate;
+    }
+  }, [isIndeterminate]);
+
+  const handleSelectAll = () => {
+    if (isAllSelected) {
+      const filteredIdSet = new Set(filteredLeads.map((l) => l.id));
+      setSelectedLeadIds((prev) => prev.filter((id) => !filteredIdSet.has(id)));
+    } else {
+      const newIds = new Set([...selectedLeadIds, ...filteredLeads.map((l) => l.id)]);
+      setSelectedLeadIds(Array.from(newIds));
+    }
+  };
+
+  const handleToggleLead = (id, e) => {
+    e?.stopPropagation();
+    setSelectedLeadIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="leads-view">
       {/* Conditional Breadcrumbs when redirected from Dashboard */}
@@ -112,21 +146,6 @@ export default function LeadsView({
           </nav>
         </div>
       )}
-
-      {/* Banner */}
-      <div className="dashboard-banner">
-        <div className="banner-text">
-          <h2>Leads Directory & Sales Pipeline</h2>
-          <p>Full sales status tracking, follow-up scheduling & quick drawer inspection</p>
-        </div>
-        <button
-          className="btn-primary"
-          style={{ background: '#FFFFFF', color: '#063669', borderColor: '#FFFFFF', fontWeight: 700 }}
-          onClick={() => onOpenCreateModal('createLead')}
-        >
-          <Plus size={16} /> Create New Lead
-        </button>
-      </div>
 
       {/* Filter & Control Bar */}
       <div className="section-card" style={{ padding: '1rem' }}>
@@ -216,16 +235,71 @@ export default function LeadsView({
 
       {/* Leads Main Table */}
       <div className="section-card">
-        <div className="section-header">
-          <h3 className="section-title">
-            Lead Records ({filteredLeads.length})
-          </h3>
+        <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <h3 className="section-title">
+              Lead Records ({filteredLeads.length})
+            </h3>
+            {selectedLeadIds.length > 0 && (
+              <span
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  padding: '0.2rem 0.65rem',
+                  borderRadius: '12px',
+                  background: '#E6EFF8',
+                  color: '#063669',
+                  border: '1px solid rgba(6, 54, 105, 0.15)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                {selectedLeadIds.length} selected
+                <button
+                  type="button"
+                  onClick={() => setSelectedLeadIds([])}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                    color: '#063669',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                    lineHeight: 1
+                  }}
+                  title="Clear selection"
+                  aria-label="Clear selection"
+                >
+                  ✕
+                </button>
+              </span>
+            )}
+          </div>
+          <button
+            className="btn-primary"
+            onClick={() => onOpenCreateModal('createLead')}
+            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
+          >
+            <Plus size={15} /> Create Lead
+          </button>
         </div>
 
         <div style={{ overflowX: 'auto' }}>
           <table className="action-table">
             <thead>
               <tr>
+                <th className="th-checkbox">
+                  <input
+                    ref={selectAllRef}
+                    type="checkbox"
+                    className="table-checkbox"
+                    checked={isAllSelected}
+                    onChange={handleSelectAll}
+                    aria-label="Select all leads"
+                  />
+                </th>
                 <th>Lead Name</th>
                 <th>Company</th>
                 <th>Designation</th>
@@ -239,53 +313,68 @@ export default function LeadsView({
             <tbody>
               {filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan={8} style={{ textAlign: 'center', padding: '2rem', color: '#557396' }}>
+                  <td colSpan={9} style={{ textAlign: 'center', padding: '2rem', color: '#557396' }}>
                     No leads found matching current filter criteria.
                   </td>
                 </tr>
               ) : (
-                filteredLeads.map((lead) => (
-                  <tr
-                    key={lead.id}
-                    className={lead.isOverdue ? 'overdue-row' : ''}
-                    onClick={() => onSelectLead(lead)}
-                  >
-                    <td style={{ fontWeight: 700, color: '#063669' }}>
-                      {lead.leadName}
-                    </td>
-                    <td style={{ fontWeight: 600 }}>{lead.company}</td>
-                    <td>{lead.designation}</td>
-                    <td>
-                      <span className="status-chip new" style={{ fontSize: '0.7rem' }}>
-                        {lead.leadSource}
-                      </span>
-                    </td>
-                    <td>
-                      <span className={`status-chip ${lead.status.toLowerCase()}`}>
-                        {lead.status}
-                      </span>
-                    </td>
-                    <td>{lead.leadOwner}</td>
-                    <td>
-                      <span style={{ color: lead.isOverdue ? '#063669' : '#063669', fontWeight: 600 }}>
-                        <Clock size={12} style={{ display: 'inline', marginRight: 4 }} />
-                        {lead.nextFollowup}
-                      </span>
-                    </td>
-                    <td>
-                      <button
-                        className="btn-secondary"
-                        style={{ padding: '0.2rem 0.5rem', fontSize: '0.725rem' }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onSelectLead(lead);
-                        }}
+                filteredLeads.map((lead) => {
+                  const isSelected = selectedLeadIds.includes(lead.id);
+                  return (
+                    <tr
+                      key={lead.id}
+                      className={`${lead.isOverdue ? 'overdue-row' : ''} ${isSelected ? 'selected-row' : ''}`}
+                      onClick={() => onSelectLead(lead)}
+                    >
+                      <td
+                        className="td-checkbox"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        Inspect <ChevronRight size={12} />
-                      </button>
-                    </td>
-                  </tr>
-                ))
+                        <input
+                          type="checkbox"
+                          className="table-checkbox"
+                          checked={isSelected}
+                          onChange={(e) => handleToggleLead(lead.id, e)}
+                          aria-label={`Select ${lead.leadName}`}
+                        />
+                      </td>
+                      <td style={{ fontWeight: 700, color: '#063669' }}>
+                        {lead.leadName}
+                      </td>
+                      <td style={{ fontWeight: 600 }}>{lead.company}</td>
+                      <td>{lead.designation}</td>
+                      <td>
+                        <span className="status-chip new" style={{ fontSize: '0.7rem' }}>
+                          {lead.leadSource}
+                        </span>
+                      </td>
+                      <td>
+                        <span className={`status-chip ${lead.status.toLowerCase()}`}>
+                          {lead.status}
+                        </span>
+                      </td>
+                      <td>{lead.leadOwner}</td>
+                      <td>
+                        <span style={{ color: lead.isOverdue ? '#063669' : '#063669', fontWeight: 600 }}>
+                          <Clock size={12} style={{ display: 'inline', marginRight: 4 }} />
+                          {lead.nextFollowup}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn-secondary"
+                          style={{ padding: '0.2rem 0.5rem', fontSize: '0.725rem' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onSelectLead(lead);
+                          }}
+                        >
+                          Inspect <ChevronRight size={12} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

@@ -151,24 +151,6 @@ export default function DashboardView({
 
   return (
     <div className="dashboard-view">
-      {/* Management Snapshot Header Banner */}
-      <div className="dashboard-banner">
-        <div className="banner-text">
-          <h2>Management Snapshot</h2>
-          <p>
-            Answering: How much revenue do we have? Where are leads coming from? What needs action today?
-          </p>
-        </div>
-        <div style={{ display: 'flex', gap: '0.5rem', zIndex: 2 }}>
-          <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600 }}>
-            {selectedOwnerFilter}
-          </span>
-          <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600 }}>
-            {getFilterLabel(selectedDateFilter)}
-          </span>
-        </div>
-      </div>
-
       {/* Top 3 Revenue KPI Cards */}
       <div className="revenue-grid">
         <div

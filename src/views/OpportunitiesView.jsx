@@ -91,20 +91,10 @@ export default function OpportunitiesView({
 
   // Helper for owner avatar styling and initials
   const getOwnerBadge = (ownerName) => {
-    if (!ownerName) return { initials: 'OP', bg: '#64748B' };
+    if (!ownerName) return { initials: 'OP', bg: '#063669' };
     const parts = ownerName.split(' ');
     const initials = parts.length >= 2 ? `${parts[0][0]}${parts[1][0]}` : ownerName.substring(0, 2).toUpperCase();
-    
-    const colorMap = {
-      'Rahul Verma': '#6366F1',
-      'Priya Sharma': '#EC4899',
-      'Rajesh Sharma': '#063669',
-      'Priya Patel': '#8B5CF6',
-      'Amit Verma': '#10B981',
-      'Ananya Rao': '#F59E0B',
-      'Vikram Malhotra': '#3B82F6'
-    };
-    return { initials, bg: colorMap[ownerName] || '#084482' };
+    return { initials, bg: '#063669' };
   };
 
   // Helper for stage badge styling
@@ -139,50 +129,6 @@ export default function OpportunitiesView({
 
   return (
     <div className="opportunities-view-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-
-
-      {/* Top Section Page Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-        <div>
-          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#063669', margin: 0, letterSpacing: '-0.02em' }}>
-            Opportunities
-          </h2>
-          <p style={{ color: '#557396', fontSize: '0.9rem', margin: '4px 0 0 0' }}>
-            Manage and track your active Opportunities
-          </p>
-        </div>
-
-        {/* Search Accounts / Opportunities Input Box */}
-        <div style={{ position: 'relative', width: '300px' }}>
-          <Search size={16} color="#64748B" style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)' }} />
-          <input
-            type="text"
-            placeholder="Search Accounts..."
-            value={localSearch}
-            onChange={(e) => setLocalSearch(e.target.value)}
-            style={{
-              width: '100%',
-              padding: '8px 14px 8px 38px',
-              borderRadius: '9999px',
-              border: '1px solid #E2E8F0',
-              background: '#FFFFFF',
-              fontSize: '0.875rem',
-              outline: 'none',
-              boxShadow: '0 2px 6px rgba(0,0,0,0.02)',
-              transition: 'all 0.2s ease'
-            }}
-          />
-          {localSearch && (
-            <button
-              onClick={() => setLocalSearch('')}
-              style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8' }}
-            >
-              <X size={14} />
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Main Opportunities Queue Card */}
       <div className="section-card" style={{ background: '#FFFFFF', borderRadius: '16px', border: '1px solid #F1F5F9', boxShadow: '0 4px 20px rgba(6, 54, 105, 0.03)', padding: '1.25rem 1.5rem', overflow: 'hidden' }}>
         
@@ -204,8 +150,41 @@ export default function OpportunitiesView({
           </div>
 
           {/* Right Action Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
             
+            {/* Search Accounts / Opportunities Input Box */}
+            <div style={{ position: 'relative', width: '220px' }}>
+              <Search size={15} color="#64748B" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
+              <input
+                type="text"
+                placeholder="Search Accounts..."
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '7px 14px 7px 34px',
+                  borderRadius: '9999px',
+                  border: '1px solid #E2E8F0',
+                  background: '#FFFFFF',
+                  fontSize: '0.825rem',
+                  outline: 'none',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.02)',
+                  transition: 'all 0.2s ease',
+                  color: '#063669'
+                }}
+              />
+              {localSearch && (
+                <button
+                  onClick={() => setLocalSearch('')}
+                  style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#94A3B8' }}
+                  title="Clear search"
+                  aria-label="Clear search"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+
             {/* View Mode Segmented Switcher */}
             <div style={{ display: 'flex', background: '#F1F5F9', borderRadius: '10px', padding: '3px', gap: '2px' }}>
               <button

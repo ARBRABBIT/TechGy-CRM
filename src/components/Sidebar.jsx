@@ -113,7 +113,7 @@ export default function Sidebar({
           <button
             type="button"
             onClick={() => setMobileOpen(false)}
-            style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: '0.25rem' }}
+            style={{ background: 'none', border: 'none', color: '#063669', cursor: 'pointer', padding: '0.25rem' }}
             title="Close Sidebar"
           >
             <X size={20} />
@@ -169,7 +169,7 @@ export default function Sidebar({
           className="sidebar-profile"
           style={{
             padding: '1rem',
-            borderTop: 'none',
+            borderTop: '1px solid #E5EBF2',
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
@@ -187,7 +187,7 @@ export default function Sidebar({
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              background: '#084482',
+              background: '#063669',
               color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',
@@ -201,10 +201,10 @@ export default function Sidebar({
             RS
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-            <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <span style={{ fontSize: '0.875rem', fontWeight: 700, color: '#063669', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               Rajesh Sharma
             </span>
-            <span style={{ fontSize: '0.725rem', color: '#D0DCEB', whiteSpace: 'nowrap' }}>
+            <span style={{ fontSize: '0.725rem', color: '#557396', whiteSpace: 'nowrap' }}>
               Sales Director
             </span>
           </div>
@@ -214,7 +214,7 @@ export default function Sidebar({
           className="sidebar-profile collapsed"
           style={{
             padding: '1rem 0',
-            borderTop: 'none',
+            borderTop: '1px solid #E5EBF2',
             display: 'flex',
             justifyContent: 'center',
             cursor: 'pointer'
@@ -230,7 +230,7 @@ export default function Sidebar({
               width: '36px',
               height: '36px',
               borderRadius: '50%',
-              background: '#084482',
+              background: '#063669',
               color: '#FFFFFF',
               display: 'flex',
               alignItems: 'center',

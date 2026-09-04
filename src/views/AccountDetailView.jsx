@@ -206,24 +206,23 @@ export default function AccountDetailView({
         </nav>
       </div>
 
-      {/* 2. Top Banner Header */}
-      <div className="dashboard-banner" style={{ marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-        <div className="banner-text">
+      {/* 2. Top Header Card */}
+      <div className="section-card" style={{ marginBottom: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', padding: '1.25rem 1.5rem' }}>
+        <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.35rem' }}>
-            <h2 style={{ fontSize: '1.4rem', margin: 0 }}>{account.companyName}</h2>
-            <span className="counter-badge alert" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600 }}>
+            <h2 style={{ fontSize: '1.4rem', margin: 0, color: '#063669', fontWeight: 700 }}>{account.companyName}</h2>
+            <span className="counter-badge alert" style={{ background: '#E6EFF8', color: '#063669', border: '1px solid rgba(6, 54, 105, 0.15)', fontWeight: 600 }}>
               Est. Worth {account.estimatedAccountValue}
             </span>
           </div>
-          <p style={{ margin: 0 }}>
+          <p style={{ margin: 0, color: '#557396', fontSize: '0.875rem' }}>
             {account.industry} • {account.companySize} • Owner: {account.accountOwner}
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', zIndex: 2, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <button
             className="btn-primary"
-            style={{ background: '#FFFFFF', color: '#063669', borderColor: '#FFFFFF', fontWeight: 700 }}
             onClick={() => onOpenCreateModal('createLead')}
           >
             <Plus size={16} /> Add Lead to Account

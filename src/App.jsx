@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './components/Sidebar';
 import GlobalHeader from './components/GlobalHeader';
 import CommonActionsModal from './components/CommonActionsModal';
+import LogoutConfirmModal from './components/LogoutConfirmModal';
 
 // Views
 import DashboardView from './views/DashboardView';
@@ -79,9 +81,10 @@ export default function App() {
   const [leadNavSource, setLeadNavSource] = useState('leads');
   const [accountInitialTab, setAccountInitialTab] = useState('Leads');
 
-  // Create Modal State
+  // Create & Logout Modal States
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [modalInitialType, setModalInitialType] = useState('createLead');
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   // Interactive View Filter State
   const [leadsSourceFilter, setLeadsSourceFilter] = useState('');
@@ -145,8 +148,13 @@ export default function App() {
     }
   };
 
-  // Cross-Navigation Handlers (Dashboard Interactions)
-  const handleLogout = () => {
+  // Cross-Navigation Handlers (Dashboard Interactions & Session Management)
+  const handleRequestLogout = () => {
+    setIsLogoutModalOpen(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setIsLogoutModalOpen(false);
     setIsAuthenticated(false);
     setCurrentUser(null);
     localStorage.setItem('techgy_authenticated', JSON.stringify(false));
@@ -155,6 +163,7 @@ export default function App() {
     setSelectedAccount(null);
     setIsProfileActive(false);
     setActiveModule('dashboard');
+    triggerToast('Logged out of TechGy Link', 'Session ended safely');
   };
   const handleNavigateToLeads = (source = '', overdue = false) => {
     setSelectedLead(null);
@@ -453,11 +462,7 @@ export default function App() {
           onClearAll={handleClearAllNotifications}
           onSelectNotification={handleSelectNotification}
           onOpenProfile={handleOpenProfile}
-          onLogout={() => {
-            setIsAuthenticated(false);
-            setCurrentUser(null);
-            setToastMessage('Logged out of TechGy Link');
-          }}
+          onLogout={handleRequestLogout}
         />
 
         {/* 3. Main Page Content with Keyed Dynamic Transition */}
@@ -482,7 +487,7 @@ export default function App() {
                 setSelectedAccount(acc);
                 setActiveModule('accounts');
               }}
-              onLogout={handleLogout}
+              onLogout={handleRequestLogout}
             />
           ) : selectedLead ? (
             <LeadDetailView
@@ -798,38 +803,67 @@ export default function App() {
         initialType={modalInitialType}
       />
 
-      {/* Toast Banner Container */}
-      {toastMessage && (
-        <div className="toast-container">
-          <div className="toast-banner">
-            <div className="toast-icon-wrap">
-              <CheckCircle2 size={18} />
-            </div>
-            <div className="toast-content">
-              {typeof toastMessage === 'object' ? (
-                <>
-                  <div className="toast-title">{toastMessage.title}</div>
-                  {toastMessage.description && (
-                    <div className="toast-desc">{toastMessage.description}</div>
-                  )}
-                </>
-              ) : (
-                <div className="toast-title">{toastMessage}</div>
-              )}
-            </div>
-            <button
-              type="button"
-              className="toast-dismiss-btn"
-              onClick={() => setToastMessage(null)}
-              title="Dismiss"
-              aria-label="Dismiss notification"
+      {/* Logout Confirmation Pop-up Modal with Smooth Animation */}
+      <LogoutConfirmModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        user={currentUser}
+      />
+
+      {/* Toast Banner Container with Smooth Pop-Up Animation */}
+      <div className="toast-container" aria-live="polite" role="region">
+        <AnimatePresence mode="wait">
+          {toastMessage && (
+            <motion.div
+              key={typeof toastMessage === 'object' ? `${toastMessage.title}-${toastMessage.description || ''}` : toastMessage}
+              className="toast-banner"
+              initial={{ opacity: 0, y: 35, scale: 0.92, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+              exit={{
+                opacity: 0,
+                y: 20,
+                scale: 0.95,
+                filter: 'blur(3px)',
+                transition: { duration: 0.25, ease: [0.16, 1, 0.3, 1] }
+              }}
+              transition={{
+                type: 'spring',
+                damping: 24,
+                stiffness: 280,
+                mass: 0.7
+              }}
+              whileHover={{ y: -3, transition: { duration: 0.15 } }}
             >
-              <X size={15} />
-            </button>
-            <div className="toast-progress-bar" />
-          </div>
-        </div>
-      )}
+              <div className="toast-icon-wrap">
+                <CheckCircle2 size={18} />
+              </div>
+              <div className="toast-content">
+                {typeof toastMessage === 'object' ? (
+                  <>
+                    <div className="toast-title">{toastMessage.title}</div>
+                    {toastMessage.description && (
+                      <div className="toast-desc">{toastMessage.description}</div>
+                    )}
+                  </>
+                ) : (
+                  <div className="toast-title">{toastMessage}</div>
+                )}
+              </div>
+              <button
+                type="button"
+                className="toast-dismiss-btn"
+                onClick={() => setToastMessage(null)}
+                title="Dismiss"
+                aria-label="Dismiss notification"
+              >
+                <X size={15} />
+              </button>
+              <div className="toast-progress-bar" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

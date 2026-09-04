@@ -44,15 +44,6 @@ export default function AccountsView({
           </nav>
         </div>
       )}
-      <div className="dashboard-banner">
-        <div className="banner-text">
-          <h2>Company Accounts</h2>
-          <p>Enterprise organization profiles, linked leads, contacts & estimated worth</p>
-        </div>
-        <span className="counter-badge tasks" style={{ background: '#084482', color: '#FFFFFF', border: '1px solid #1A4F85', fontWeight: 600, zIndex: 2 }}>
-          {filteredAccounts.length} Companies Registered
-        </span>
-      </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem' }}>
         {filteredAccounts.map((acc) => (
